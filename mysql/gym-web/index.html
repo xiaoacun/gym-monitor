@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>健身房监控系统</title>
+  <title>鍋ヨ韩鎴跨洃鎺х郴缁?/title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
@@ -124,243 +124,243 @@
 </head>
 <body>
 
-  <!-- ==================== 登录页 ==================== -->
+  <!-- ==================== 鐧诲綍椤?==================== -->
   <div id="loginPage" class="login-page">
     <div class="login-container">
       <div class="login-header">
-        <h1>健身房监控系统</h1>
-        <p>请输入用户名和密码登录</p>
+        <h1>鍋ヨ韩鎴跨洃鎺х郴缁?/h1>
+        <p>璇疯緭鍏ョ敤鎴峰悕鍜屽瘑鐮佺櫥褰?/p>
       </div>
       <div id="loginMessage"></div>
       <form id="loginForm">
         <div class="form-group">
-          <label>用户名</label>
-          <input type="text" id="loginUsername" placeholder="请输入用户名" required autofocus>
+          <label>鐢ㄦ埛鍚?/label>
+          <input type="text" id="loginUsername" placeholder="璇疯緭鍏ョ敤鎴峰悕" required autofocus>
         </div>
         <div class="form-group">
-          <label>密码</label>
-          <input type="password" id="loginPassword" placeholder="请输入密码" required>
+          <label>瀵嗙爜</label>
+          <input type="password" id="loginPassword" placeholder="璇疯緭鍏ュ瘑鐮? required>
         </div>
-        <button type="submit" class="btn-primary">登录</button>
+        <button type="submit" class="btn-primary">鐧诲綍</button>
       </form>
-      <div class="form-footer">还没有账号？ <a onclick="showRegister()">立即注册</a></div>
+      <div class="form-footer">杩樻病鏈夎处鍙凤紵 <a onclick="showRegister()">绔嬪嵆娉ㄥ唽</a></div>
     </div>
   </div>
 
-  <!-- ==================== 注册页 ==================== -->
+  <!-- ==================== 娉ㄥ唽椤?==================== -->
   <div id="registerPage" class="login-page hidden">
     <div class="login-container">
-      <a onclick="showLogin()" style="color:#667eea;text-decoration:none;font-size:14px;cursor:pointer;display:inline-block;margin-bottom:20px;">← 返回登录</a>
+      <a onclick="showLogin()" style="color:#667eea;text-decoration:none;font-size:14px;cursor:pointer;display:inline-block;margin-bottom:20px;">鈫?杩斿洖鐧诲綍</a>
       <div class="login-header">
-        <h1>注册新用户</h1>
-        <p>简单几步，开始使用健身房监控系统</p>
+        <h1>娉ㄥ唽鏂扮敤鎴?/h1>
+        <p>绠€鍗曞嚑姝ワ紝寮€濮嬩娇鐢ㄥ仴韬埧鐩戞帶绯荤粺</p>
       </div>
       <div id="registerMessage"></div>
       <form id="registerForm">
         <div class="form-group">
-          <label>用户名 *</label>
-          <input type="text" id="regUsername" placeholder="请输入用户名" required minlength="2" maxlength="20">
-          <div class="form-hint">2-20个字符</div>
+          <label>鐢ㄦ埛鍚?*</label>
+          <input type="text" id="regUsername" placeholder="璇疯緭鍏ョ敤鎴峰悕" required minlength="2" maxlength="20">
+          <div class="form-hint">2-20涓瓧绗?/div>
         </div>
         <div class="form-group">
-          <label>密码 *</label>
-          <input type="password" id="regPassword" placeholder="请输入密码" required minlength="6">
-          <div class="form-hint">至少6个字符</div>
+          <label>瀵嗙爜 *</label>
+          <input type="password" id="regPassword" placeholder="璇疯緭鍏ュ瘑鐮? required minlength="6">
+          <div class="form-hint">鑷冲皯6涓瓧绗?/div>
         </div>
         <div class="form-group">
-          <label>确认密码 *</label>
-          <input type="password" id="regPassword2" placeholder="请再次输入密码" required>
+          <label>纭瀵嗙爜 *</label>
+          <input type="password" id="regPassword2" placeholder="璇峰啀娆¤緭鍏ュ瘑鐮? required>
         </div>
         <div class="form-group">
-          <label>手机号</label>
-          <input type="tel" id="regPhone" placeholder="请输入手机号（可选）">
+          <label>鎵嬫満鍙?/label>
+          <input type="tel" id="regPhone" placeholder="璇疯緭鍏ユ墜鏈哄彿锛堝彲閫夛級">
         </div>
         <div class="form-group">
-          <label>邮箱</label>
-          <input type="email" id="regEmail" placeholder="请输入邮箱（可选）">
+          <label>閭</label>
+          <input type="email" id="regEmail" placeholder="璇疯緭鍏ラ偖绠憋紙鍙€夛級">
         </div>
-        <button type="submit" class="btn-primary">注册</button>
+        <button type="submit" class="btn-primary">娉ㄥ唽</button>
       </form>
-      <div class="form-footer">已有账户？ <a onclick="showLogin()">立即登录</a></div>
+      <div class="form-footer">宸叉湁璐︽埛锛?<a onclick="showLogin()">绔嬪嵆鐧诲綍</a></div>
     </div>
   </div>
 
-  <!-- ==================== 主应用 ==================== -->
+  <!-- ==================== 涓诲簲鐢?==================== -->
   <div id="appLayout" class="app-layout">
     <div class="sidebar">
       <div class="sidebar-logo">
-        <h2>健身房监控</h2>
+        <h2>鍋ヨ韩鎴跨洃鎺?/h2>
         <span>Gym Monitor System</span>
       </div>
       <ul class="sidebar-menu">
-        <li><a href="#" onclick="navigate('dashboard')" id="nav-dashboard" class="active">📊 数据监控</a></li>
-        <li><a href="#" onclick="navigate('booking')" id="nav-booking">📅 器械预约</a></li>
-        <li><a href="#" onclick="navigate('analytics')" id="nav-analytics">📈 数据分析</a></li>
-        <li><a href="#" onclick="navigate('history')" id="nav-history">📜 历史记录</a></li>
-        <li id="nav-admin-li" class="hidden"><a href="#" onclick="navigate('admin')" id="nav-admin">🛠️ 管理后台</a></li>
-        <li><a href="#" onclick="navigate('settings')" id="nav-settings">⚙️ 系统设置</a></li>
+        <li><a href="#" onclick="navigate('dashboard')" id="nav-dashboard" class="active">馃搳 鏁版嵁鐩戞帶</a></li>
+        <li><a href="#" onclick="navigate('booking')" id="nav-booking">馃搮 鍣ㄦ棰勭害</a></li>
+        <li><a href="#" onclick="navigate('analytics')" id="nav-analytics">馃搱 鏁版嵁鍒嗘瀽</a></li>
+        <li><a href="#" onclick="navigate('history')" id="nav-history">馃摐 鍘嗗彶璁板綍</a></li>
+        <li id="nav-admin-li" class="hidden"><a href="#" onclick="navigate('admin')" id="nav-admin">馃洜锔?绠＄悊鍚庡彴</a></li>
+        <li><a href="#" onclick="navigate('settings')" id="nav-settings">鈿欙笍 绯荤粺璁剧疆</a></li>
       </ul>
       <div class="sidebar-user">
-        当前用户：<strong id="sidebarUsername">--</strong><br>
-        <span id="sidebarRole">普通用户</span>
+        褰撳墠鐢ㄦ埛锛?strong id="sidebarUsername">--</strong><br>
+        <span id="sidebarRole">鏅€氱敤鎴?/span>
         <br><br>
-        <a href="#" onclick="logout()" style="color:#e74c3c;font-size:13px;text-decoration:none;">退出登录</a>
+        <a href="#" onclick="logout()" style="color:#e74c3c;font-size:13px;text-decoration:none;">閫€鍑虹櫥褰?/a>
       </div>
     </div>
 
     <div class="main-content">
-      <!-- 数据监控 -->
+      <!-- 鏁版嵁鐩戞帶 -->
       <div id="page-dashboard" class="page-content">
-        <div class="page-header"><h1>📊 实时数据监控</h1></div>
+        <div class="page-header"><h1>馃搳 瀹炴椂鏁版嵁鐩戞帶</h1></div>
         <div class="stats-grid">
-          <div class="stat-card"><div class="stat-value" id="d-currentPeople">--</div><div class="stat-label">当前人数</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-maxPeople">--</div><div class="stat-label">最大容量</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-temperature">--</div><div class="stat-label">温度</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-humidity">--</div><div class="stat-label">湿度</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-equipment1">--</div><div class="stat-label">器械1状态</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-equipment2">--</div><div class="stat-label">器械2状态</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-eq1Count">--</div><div class="stat-label">器械1使用次数</div></div>
-          <div class="stat-card"><div class="stat-value" id="d-eq2Count">--</div><div class="stat-label">器械2使用次数</div></div>
+          <div class="stat-card"><div class="stat-value" id="d-currentPeople">--</div><div class="stat-label">褰撳墠浜烘暟</div></div>
+          <div class="stat-card"><div class="stat-value" id="d-maxPeople">--</div><div class="stat-label">鏈€澶у閲?/div></div>
+          <div class="stat-card"><div class="stat-value" id="d-temperature">--</div><div class="stat-label">娓╁害</div></div>
+          <div class="stat-card"><div class="stat-value" id="d-humidity">--</div><div class="stat-label">婀垮害</div></div>
+          <div class="stat-card"><div class="stat-value" id="d-equipment1">--</div><div class="stat-label">鍣ㄦ1鐘舵€?/div></div>
+          <div class="stat-card"><div class="stat-value" id="d-equipment2">--</div><div class="stat-label">鍣ㄦ2鐘舵€?/div></div>
+          <div class="stat-card"><div class="stat-value" id="d-eq1Count">--</div><div class="stat-label">鍣ㄦ1浣跨敤娆℃暟</div></div>
+          <div class="stat-card"><div class="stat-value" id="d-eq2Count">--</div><div class="stat-label">鍣ㄦ2浣跨敤娆℃暟</div></div>
         </div>
         <div class="card">
-          <div class="card-title">我的预约</div>
-          <div id="d-myBookings"><div class="no-data">加载中...</div></div>
-          <div style="margin-top:16px;"><a href="#" onclick="navigate('booking')" style="color:#3498db;text-decoration:none;">📅 新建预约</a></div>
+          <div class="card-title">鎴戠殑棰勭害</div>
+          <div id="d-myBookings"><div class="no-data">鍔犺浇涓?..</div></div>
+          <div style="margin-top:16px;"><a href="#" onclick="navigate('booking')" style="color:#3498db;text-decoration:none;">馃搮 鏂板缓棰勭害</a></div>
         </div>
-        <div style="color:#999;font-size:13px;margin-top:12px;">最后更新：<span id="d-updateTime">--</span></div>
+        <div style="color:#999;font-size:13px;margin-top:12px;">鏈€鍚庢洿鏂帮細<span id="d-updateTime">--</span></div>
       </div>
 
-      <!-- 器械预约 -->
+      <!-- 鍣ㄦ棰勭害 -->
       <div id="page-booking" class="page-content hidden">
-        <div class="page-header"><h1>📅 器械预约</h1></div>
+        <div class="page-header"><h1>馃搮 鍣ㄦ棰勭害</h1></div>
         <div id="bookingMessage"></div>
         <div class="card">
-          <div class="card-title">新建预约</div>
+          <div class="card-title">鏂板缓棰勭害</div>
           <div class="form-group">
-            <label>选择器械</label>
+            <label>閫夋嫨鍣ㄦ</label>
             <div class="equipment-selector">
               <div class="equipment-option" onclick="selectEquipment(1)" id="eq-opt-1">
-                <div class="equipment-icon">🏋️</div>
-                <div class="equipment-name">器械 1</div>
+                <div class="equipment-icon">馃弸锔?/div>
+                <div class="equipment-name">鍣ㄦ 1</div>
               </div>
               <div class="equipment-option" onclick="selectEquipment(2)" id="eq-opt-2">
-                <div class="equipment-icon">🏃</div>
-                <div class="equipment-name">器械 2</div>
+                <div class="equipment-icon">馃弮</div>
+                <div class="equipment-name">鍣ㄦ 2</div>
               </div>
             </div>
           </div>
           <div class="form-group">
-            <label>选择日期</label>
+            <label>閫夋嫨鏃ユ湡</label>
             <input type="date" id="bookingDate" onchange="checkBookings()">
-            <div class="form-hint">只可选择今天及以后的日期</div>
+            <div class="form-hint">鍙彲閫夋嫨浠婂ぉ鍙婁互鍚庣殑鏃ユ湡</div>
           </div>
           <div class="form-group">
-            <label>选择时段（固定1小时）</label>
+            <label>閫夋嫨鏃舵锛堝浐瀹?灏忔椂锛?/label>
             <div class="time-slots" id="timeSlots"></div>
           </div>
-          <button class="btn-primary" onclick="submitBooking()" id="submitBtn" disabled>请先选择器械和时段</button>
+          <button class="btn-primary" onclick="submitBooking()" id="submitBtn" disabled>璇峰厛閫夋嫨鍣ㄦ鍜屾椂娈?/button>
         </div>
       </div>
 
-      <!-- 数据分析 -->
+      <!-- 鏁版嵁鍒嗘瀽 -->
       <div id="page-analytics" class="page-content hidden">
-        <div class="page-header"><h1>📈 数据分析</h1></div>
+        <div class="page-header"><h1>馃搱 鏁版嵁鍒嗘瀽</h1></div>
         <div class="stats-grid">
-          <div class="stat-card"><div class="stat-value" id="a-avgPeople">--</div><div class="stat-label">今日平均人数</div></div>
-          <div class="stat-card"><div class="stat-value" id="a-maxPeople">--</div><div class="stat-label">今日峰值人数</div></div>
-          <div class="stat-card"><div class="stat-value" id="a-totalBookings">--</div><div class="stat-label">今日预约数</div></div>
-          <div class="stat-card"><div class="stat-value" id="a-peakHour">--</div><div class="stat-label">高峰时段</div></div>
+          <div class="stat-card"><div class="stat-value" id="a-avgPeople">--</div><div class="stat-label">浠婃棩骞冲潎浜烘暟</div></div>
+          <div class="stat-card"><div class="stat-value" id="a-maxPeople">--</div><div class="stat-label">浠婃棩宄板€间汉鏁?/div></div>
+          <div class="stat-card"><div class="stat-value" id="a-totalBookings">--</div><div class="stat-label">浠婃棩棰勭害鏁?/div></div>
+          <div class="stat-card"><div class="stat-value" id="a-peakHour">--</div><div class="stat-label">楂樺嘲鏃舵</div></div>
         </div>
         <div class="card">
-          <div class="card-title">今日人数变化曲线</div>
+          <div class="card-title">浠婃棩浜烘暟鍙樺寲鏇茬嚎</div>
           <div class="chart-wrapper"><canvas id="peopleChart"></canvas></div>
         </div>
         <div class="card">
-          <div class="card-title">器械使用分析</div>
+          <div class="card-title">鍣ㄦ浣跨敤鍒嗘瀽</div>
           <div class="chart-wrapper"><canvas id="equipmentChart"></canvas></div>
         </div>
         <div class="info-section">
           <div class="info-card">
-            <h4>🔴 高峰时段</h4>
-            <div id="peakHoursInfo">加载中...</div>
+            <h4>馃敶 楂樺嘲鏃舵</h4>
+            <div id="peakHoursInfo">鍔犺浇涓?..</div>
           </div>
           <div class="info-card">
-            <h4>🟢 宽松时段</h4>
-            <div id="quietHoursInfo">加载中...</div>
+            <h4>馃煝 瀹芥澗鏃舵</h4>
+            <div id="quietHoursInfo">鍔犺浇涓?..</div>
           </div>
         </div>
       </div>
 
-      <!-- 历史记录 -->
+      <!-- 鍘嗗彶璁板綍 -->
       <div id="page-history" class="page-content hidden">
         <div class="page-header">
-          <h1>📜 历史记录</h1>
-          <button class="btn btn-blue" onclick="loadHistory()">🔄 刷新</button>
+          <h1>馃摐 鍘嗗彶璁板綍</h1>
+          <button class="btn btn-blue" onclick="loadHistory()">馃攧 鍒锋柊</button>
         </div>
         <div class="card">
           <table class="data-table">
             <thead>
-              <tr><th>时间</th><th>人数</th><th>温度</th><th>湿度</th><th>器械1</th><th>器械2</th><th>器械1次数</th><th>器械2次数</th></tr>
+              <tr><th>鏃堕棿</th><th>浜烘暟</th><th>娓╁害</th><th>婀垮害</th><th>鍣ㄦ1</th><th>鍣ㄦ2</th><th>鍣ㄦ1娆℃暟</th><th>鍣ㄦ2娆℃暟</th></tr>
             </thead>
-            <tbody id="historyTableBody"><tr><td colspan="8" class="no-data">加载中...</td></tr></tbody>
+            <tbody id="historyTableBody"><tr><td colspan="8" class="no-data">鍔犺浇涓?..</td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 管理后台 -->
+      <!-- 绠＄悊鍚庡彴 -->
       <div id="page-admin" class="page-content hidden">
-        <div class="page-header"><h1>🛠️ 管理后台</h1></div>
+        <div class="page-header"><h1>馃洜锔?绠＄悊鍚庡彴</h1></div>
 
         <div class="card">
-          <div class="card-title">预约管理</div>
-          <div id="admin-bookings"><div class="no-data">加载中...</div></div>
+          <div class="card-title">棰勭害绠＄悊</div>
+          <div id="admin-bookings"><div class="no-data">鍔犺浇涓?..</div></div>
         </div>
 
         <div class="card">
-          <div class="card-title">👥 用户管理</div>
-          <button class="btn btn-blue" onclick="loadAdminUsers()" style="margin-bottom:16px;">🔄 刷新用户列表</button>
-          <div id="admin-users"><div class="no-data">加载中...</div></div>
+          <div class="card-title">馃懃 鐢ㄦ埛绠＄悊</div>
+          <button class="btn btn-blue" onclick="loadAdminUsers()" style="margin-bottom:16px;">馃攧 鍒锋柊鐢ㄦ埛鍒楄〃</button>
+          <div id="admin-users"><div class="no-data">鍔犺浇涓?..</div></div>
         </div>
 
         <div class="card">
-          <div class="card-title">📈 数据统计</div>
-          <div id="admin-analytics"><div class="no-data">点击加载</div></div>
-          <button class="btn btn-blue" onclick="loadAdminAnalytics()" style="margin-top:12px;">加载统计数据</button>
+          <div class="card-title">馃搱 鏁版嵁缁熻</div>
+          <div id="admin-analytics"><div class="no-data">鐐瑰嚮鍔犺浇</div></div>
+          <button class="btn btn-blue" onclick="loadAdminAnalytics()" style="margin-top:12px;">鍔犺浇缁熻鏁版嵁</button>
         </div>
       </div>
 
-      <!-- 系统设置 -->
+      <!-- 绯荤粺璁剧疆 -->
       <div id="page-settings" class="page-content hidden">
-        <div class="page-header"><h1>⚙️ 系统设置</h1></div>
+        <div class="page-header"><h1>鈿欙笍 绯荤粺璁剧疆</h1></div>
         <div class="card">
-          <div class="card-title">Supabase 连接配置</div>
+          <div class="card-title">Supabase 杩炴帴閰嶇疆</div>
           <div class="config-section">
             <label>Supabase URL</label>
             <input type="text" id="cfg-supabase-url" placeholder="https://xxxxx.supabase.co">
-            <div class="hint">在 Supabase 项目 Settings > API 中找到</div>
+            <div class="hint">鍦?Supabase 椤圭洰 Settings > API 涓壘鍒?/div>
           </div>
           <div class="config-section">
             <label>Supabase Anon Key</label>
             <input type="text" id="cfg-supabase-key" placeholder="eyJhbGciOiJI...">
-            <div class="hint">在 Supabase 项目 Settings > API 中找到 anon public key</div>
+            <div class="hint">鍦?Supabase 椤圭洰 Settings > API 涓壘鍒?anon public key</div>
           </div>
-          <button class="btn btn-green" onclick="saveConfig()" style="margin-top:12px;">💾 保存配置</button>
-          <button class="btn btn-blue" onclick="testConnection()" style="margin-top:12px;">🔗 测试连接</button>
+          <button class="btn btn-green" onclick="saveConfig()" style="margin-top:12px;">馃捑 淇濆瓨閰嶇疆</button>
+          <button class="btn btn-blue" onclick="testConnection()" style="margin-top:12px;">馃敆 娴嬭瘯杩炴帴</button>
           <div id="configMessage" style="margin-top:12px;"></div>
         </div>
         <div class="card">
-          <div class="card-title">系统信息</div>
+          <div class="card-title">绯荤粺淇℃伅</div>
           <div class="config-section">
-            <label>系统名称</label>
-            <input type="text" value="健身房监控系统" readonly>
+            <label>绯荤粺鍚嶇О</label>
+            <input type="text" value="鍋ヨ韩鎴跨洃鎺х郴缁? readonly>
           </div>
           <div class="config-section">
-            <label>版本</label>
+            <label>鐗堟湰</label>
             <input type="text" value="v2.0.0 (Supabase)" readonly>
           </div>
           <div class="config-section">
-            <label>部署方式</label>
-            <input type="text" value="GitHub Pages 静态部署" readonly>
+            <label>閮ㄧ讲鏂瑰紡</label>
+            <input type="text" value="GitHub Pages 闈欐€侀儴缃? readonly>
           </div>
         </div>
       </div>
@@ -383,7 +383,7 @@
       { id:12, time:'20:00-21:00', start:'20:00', end:'21:00' }
     ];
 
-    let supabase = null;
+    let supabaseClient = null;
     let currentUser = null;
     let selectedEquipment = null;
     let selectedSlot = null;
@@ -403,7 +403,7 @@
       const key = localStorage.getItem('supabase_key');
       if (url && key) {
         try {
-          supabase = window.supabase.createClient(url, key);
+          supabaseClient = window.supabase.createClient(url, key);
           return true;
         } catch (e) {
           console.error('Supabase init error:', e);
@@ -422,26 +422,26 @@
       const url = document.getElementById('cfg-supabase-url').value.trim();
       const key = document.getElementById('cfg-supabase-key').value.trim();
       if (!url || !key) {
-        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">请填写完整的 URL 和 Key</span>';
+        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">璇峰～鍐欏畬鏁寸殑 URL 鍜?Key</span>';
         return;
       }
       localStorage.setItem('supabase_url', url);
       localStorage.setItem('supabase_key', key);
       initSupabase();
-      document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">✅ 配置已保存</span>';
+      document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">鉁?閰嶇疆宸蹭繚瀛?/span>';
     }
 
     async function testConnection() {
       if (!initSupabase()) {
-        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">❌ 请先填写并保存配置</span>';
+        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">鉂?璇峰厛濉啓骞朵繚瀛橀厤缃?/span>';
         return;
       }
       try {
-        const { data, error } = await supabase.from('gym_status').select('*').limit(1);
+        const { data, error } = await supabaseClient.from('gym_status').select('*').limit(1);
         if (error) throw error;
-        document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">✅ 连接成功！数据库可访问</span>';
+        document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">鉁?杩炴帴鎴愬姛锛佹暟鎹簱鍙闂?/span>';
       } catch (e) {
-        document.getElementById('configMessage').innerHTML = `<span style="color:#e74c3c;">❌ 连接失败: ${e.message}</span>`;
+        document.getElementById('configMessage').innerHTML = `<span style="color:#e74c3c;">鉂?杩炴帴澶辫触: ${e.message}</span>`;
       }
     }
 
@@ -462,7 +462,7 @@
       document.getElementById('registerPage').classList.add('hidden');
       document.getElementById('appLayout').classList.add('active');
       document.getElementById('sidebarUsername').textContent = currentUser.username;
-      document.getElementById('sidebarRole').textContent = currentUser.role === 'admin' ? '管理员' : '普通用户';
+      document.getElementById('sidebarRole').textContent = currentUser.role === 'admin' ? '绠＄悊鍛? : '鏅€氱敤鎴?;
       if (currentUser.role === 'admin') {
         document.getElementById('nav-admin-li').classList.remove('hidden');
       } else {
@@ -486,7 +486,7 @@
 
       if (!initSupabase()) {
         document.getElementById('loginMessage').className = 'message error';
-        document.getElementById('loginMessage').textContent = '请先在系统设置中配置 Supabase 连接';
+        document.getElementById('loginMessage').textContent = '璇峰厛鍦ㄧ郴缁熻缃腑閰嶇疆 Supabase 杩炴帴';
         setTimeout(() => navigate('settings'), 0);
         currentUser = { username: '__setup__', role: 'admin' };
         showApp();
@@ -494,25 +494,25 @@
       }
 
       try {
-        const { data, error } = await supabase.from('gym_users').select('*').eq('username', username).single();
+        const { data, error } = await supabaseClient.from('gym_users').select('*').eq('username', username).single();
         if (error || !data) {
           document.getElementById('loginMessage').className = 'message error';
-          document.getElementById('loginMessage').textContent = '用户不存在，请先注册';
+          document.getElementById('loginMessage').textContent = '鐢ㄦ埛涓嶅瓨鍦紝璇峰厛娉ㄥ唽';
           return;
         }
         const hashed = await sha256(password);
         if (hashed !== data.password) {
           document.getElementById('loginMessage').className = 'message error';
-          document.getElementById('loginMessage').textContent = '密码错误';
+          document.getElementById('loginMessage').textContent = '瀵嗙爜閿欒';
           return;
         }
         currentUser = { id: data.id, username: data.username, role: data.role };
         document.getElementById('loginMessage').className = 'message success';
-        document.getElementById('loginMessage').textContent = '登录成功！';
+        document.getElementById('loginMessage').textContent = '鐧诲綍鎴愬姛锛?;
         setTimeout(() => showApp(), 500);
       } catch (err) {
         document.getElementById('loginMessage').className = 'message error';
-        document.getElementById('loginMessage').textContent = '登录失败: ' + err.message;
+        document.getElementById('loginMessage').textContent = '鐧诲綍澶辫触: ' + err.message;
       }
     });
 
@@ -526,37 +526,37 @@
 
       if (password !== password2) {
         document.getElementById('registerMessage').className = 'message error';
-        document.getElementById('registerMessage').textContent = '两次输入的密码不一致';
+        document.getElementById('registerMessage').textContent = '涓ゆ杈撳叆鐨勫瘑鐮佷笉涓€鑷?;
         return;
       }
 
       if (!initSupabase()) {
         document.getElementById('registerMessage').className = 'message error';
-        document.getElementById('registerMessage').textContent = '请先配置 Supabase 连接';
+        document.getElementById('registerMessage').textContent = '璇峰厛閰嶇疆 Supabase 杩炴帴';
         return;
       }
 
       try {
-        const { data: existing } = await supabase.from('gym_users').select('id').eq('username', username).single();
+        const { data: existing } = await supabaseClient.from('gym_users').select('id').eq('username', username).single();
         if (existing) {
           document.getElementById('registerMessage').className = 'message error';
-          document.getElementById('registerMessage').textContent = '用户名已存在';
+          document.getElementById('registerMessage').textContent = '鐢ㄦ埛鍚嶅凡瀛樺湪';
           return;
         }
 
         const hashed = await sha256(password);
-        const { error } = await supabase.from('gym_users').insert({
+        const { error } = await supabaseClient.from('gym_users').insert({
           username, password: hashed, phone: phone || null, email: email || null, role: 'user'
         });
         if (error) throw error;
 
         document.getElementById('registerMessage').className = 'message success';
-        document.getElementById('registerMessage').textContent = '注册成功！即将跳转到登录页面...';
+        document.getElementById('registerMessage').textContent = '娉ㄥ唽鎴愬姛锛佸嵆灏嗚烦杞埌鐧诲綍椤甸潰...';
         document.getElementById('registerForm').reset();
         setTimeout(() => showLogin(), 2000);
       } catch (err) {
         document.getElementById('registerMessage').className = 'message error';
-        document.getElementById('registerMessage').textContent = '注册失败: ' + err.message;
+        document.getElementById('registerMessage').textContent = '娉ㄥ唽澶辫触: ' + err.message;
       }
     });
 
@@ -587,20 +587,20 @@
     }
 
     async function loadDashboard() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
-        const { data, error } = await supabase.from('gym_status').select('*').order('update_time', { ascending: false }).limit(1).single();
+        const { data, error } = await supabaseClient.from('gym_status').select('*').order('update_time', { ascending: false }).limit(1).single();
         if (error && error.code !== 'PGRST116') throw error;
         if (data) {
           document.getElementById('d-currentPeople').textContent = data.current_people ?? '--';
           document.getElementById('d-maxPeople').textContent = data.max_people ?? '--';
-          document.getElementById('d-temperature').textContent = data.temperature !== null ? data.temperature + '℃' : '--';
+          document.getElementById('d-temperature').textContent = data.temperature !== null ? data.temperature + '鈩? : '--';
           document.getElementById('d-humidity').textContent = data.humidity !== null ? data.humidity + '%' : '--';
           const eq1 = document.getElementById('d-equipment1');
-          eq1.textContent = data.equipment1 ? '占用' : '空闲';
+          eq1.textContent = data.equipment1 ? '鍗犵敤' : '绌洪棽';
           eq1.className = 'stat-value ' + (data.equipment1 ? 'status-on' : 'status-off');
           const eq2 = document.getElementById('d-equipment2');
-          eq2.textContent = data.equipment2 ? '占用' : '空闲';
+          eq2.textContent = data.equipment2 ? '鍗犵敤' : '绌洪棽';
           eq2.className = 'stat-value ' + (data.equipment2 ? 'status-on' : 'status-off');
           document.getElementById('d-eq1Count').textContent = data.equipment1_count ?? '--';
           document.getElementById('d-eq2Count').textContent = data.equipment2_count ?? '--';
@@ -610,19 +610,19 @@
       } catch (e) { console.error('Load dashboard error:', e); }
 
       try {
-        const { data } = await supabase.from('gym_bookings').select('*').eq('username', currentUser.username).in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
+        const { data } = await supabaseClient.from('gym_bookings').select('*').eq('username', currentUser.username).in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
         const listEl = document.getElementById('d-myBookings');
         if (!data || data.length === 0) {
-          listEl.innerHTML = '<div class="no-data">暂无预约记录</div>';
+          listEl.innerHTML = '<div class="no-data">鏆傛棤棰勭害璁板綍</div>';
         } else {
           listEl.innerHTML = data.map(b => `
             <div class="booking-item">
               <div>
-                <div class="booking-equipment">器械${b.equipment_id}</div>
-                <div class="booking-time">⏰ ${b.start_time ? b.start_time.substring(0,5) : '--'} - ${b.end_time ? b.end_time.substring(0,5) : '--'}</div>
-                <div style="font-size:12px;color:#999;">📅 ${b.booking_date}</div>
+                <div class="booking-equipment">鍣ㄦ${b.equipment_id}</div>
+                <div class="booking-time">鈴?${b.start_time ? b.start_time.substring(0,5) : '--'} - ${b.end_time ? b.end_time.substring(0,5) : '--'}</div>
+                <div style="font-size:12px;color:#999;">馃搮 ${b.booking_date}</div>
               </div>
-              <button class="btn btn-red btn-sm" onclick="cancelBooking(${b.id})">取消</button>
+              <button class="btn btn-red btn-sm" onclick="cancelBooking(${b.id})">鍙栨秷</button>
             </div>
           `).join('');
         }
@@ -630,13 +630,13 @@
     }
 
     async function cancelBooking(bookingId) {
-      if (!confirm('确定要取消这个预约吗？')) return;
+      if (!confirm('纭畾瑕佸彇娑堣繖涓绾﹀悧锛?)) return;
       try {
-        const { error } = await supabase.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
+        const { error } = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
         if (error) throw error;
-        alert('预约已取消');
+        alert('棰勭害宸插彇娑?);
         loadDashboard();
-      } catch (e) { alert('取消失败: ' + e.message); }
+      } catch (e) { alert('鍙栨秷澶辫触: ' + e.message); }
     }
 
     function initBookingPage() {
@@ -659,7 +659,7 @@
       container.innerHTML = FIXED_TIME_SLOTS.map(s => `
         <div class="time-slot" id="slot-${s.id}" onclick="selectTimeSlot(${s.id})">
           <div class="slot-time">${s.time}</div>
-          <div class="slot-status">✓ 可预约</div>
+          <div class="slot-status">鉁?鍙绾?/div>
         </div>
       `).join('');
     }
@@ -679,25 +679,25 @@
       document.querySelectorAll('.time-slot').forEach(el => {
         el.classList.remove('selected');
         const st = el.querySelector('.slot-status');
-        if (st && !el.classList.contains('booked')) st.textContent = '✓ 可预约';
+        if (st && !el.classList.contains('booked')) st.textContent = '鉁?鍙绾?;
       });
       slotEl.classList.add('selected');
-      slotEl.querySelector('.slot-status').textContent = '✓ 已选择';
+      slotEl.querySelector('.slot-status').textContent = '鉁?宸查€夋嫨';
       updateSubmitBtn();
     }
 
     async function checkBookings() {
-      if (!selectedEquipment || !supabase) return;
+      if (!selectedEquipment || !supabaseClient) return;
       const bookingDate = document.getElementById('bookingDate').value;
       if (!bookingDate) return;
       try {
-        const { data } = await supabase.from('gym_bookings').select('start_time,end_time,username').eq('equipment_id', selectedEquipment).eq('booking_date', bookingDate).in('status', ['confirmed', 'pending']);
+        const { data } = await supabaseClient.from('gym_bookings').select('start_time,end_time,username').eq('equipment_id', selectedEquipment).eq('booking_date', bookingDate).in('status', ['confirmed', 'pending']);
         document.querySelectorAll('.time-slot').forEach(el => {
           el.classList.remove('booked');
           el.style.opacity = '1';
           el.style.cursor = 'pointer';
           const st = el.querySelector('.slot-status');
-          if (st && !el.classList.contains('selected')) st.textContent = '✓ 可预约';
+          if (st && !el.classList.contains('selected')) st.textContent = '鉁?鍙绾?;
         });
         if (data) {
           data.forEach(b => {
@@ -711,7 +711,7 @@
                 el.style.opacity = '0.5';
                 el.style.cursor = 'not-allowed';
                 const st = el.querySelector('.slot-status');
-                if (st) st.textContent = '× 已被 ' + b.username + ' 预约';
+                if (st) st.textContent = '脳 宸茶 ' + b.username + ' 棰勭害';
               }
             });
           });
@@ -723,41 +723,41 @@
       const btn = document.getElementById('submitBtn');
       if (selectedEquipment && selectedSlot) {
         btn.disabled = false;
-        btn.textContent = '确认预约';
+        btn.textContent = '纭棰勭害';
       } else {
         btn.disabled = true;
-        btn.textContent = '请先选择器械和时段';
+        btn.textContent = '璇峰厛閫夋嫨鍣ㄦ鍜屾椂娈?;
       }
     }
 
     async function submitBooking() {
-      if (!selectedEquipment || !selectedSlot || !supabase) return;
+      if (!selectedEquipment || !selectedSlot || !supabaseClient) return;
       const bookingDate = document.getElementById('bookingDate').value;
       try {
         const startParts = selectedSlot.start.split(':');
         const endH = parseInt(startParts[0]) + 1;
         const endTime = String(endH).padStart(2,'0') + ':' + startParts[1];
 
-        const { data: existing } = await supabase.from('gym_bookings').select('id').eq('equipment_id', selectedEquipment).eq('booking_date', bookingDate).in('status', ['confirmed', 'pending']).gte('start_time', selectedSlot.start).lte('end_time', endTime);
+        const { data: existing } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', selectedEquipment).eq('booking_date', bookingDate).in('status', ['confirmed', 'pending']).gte('start_time', selectedSlot.start).lte('end_time', endTime);
         if (existing && existing.length > 0) {
-          showBookingMsg('该时段已被预约', 'error');
+          showBookingMsg('璇ユ椂娈靛凡琚绾?, 'error');
           return;
         }
 
-        const { error } = await supabase.from('gym_bookings').insert({
+        const { error } = await supabaseClient.from('gym_bookings').insert({
           user_id: currentUser.id, username: currentUser.username,
           equipment_id: selectedEquipment, booking_date: bookingDate,
           start_time: selectedSlot.start, end_time: endTime, status: 'confirmed'
         });
         if (error) throw error;
 
-        showBookingMsg('预约成功！', 'success');
+        showBookingMsg('棰勭害鎴愬姛锛?, 'success');
         selectedEquipment = null;
         selectedSlot = null;
         document.querySelectorAll('.equipment-option').forEach(el => el.classList.remove('selected'));
         renderTimeSlots();
         updateSubmitBtn();
-      } catch (e) { showBookingMsg('预约失败: ' + e.message, 'error'); }
+      } catch (e) { showBookingMsg('棰勭害澶辫触: ' + e.message, 'error'); }
     }
 
     function showBookingMsg(msg, type) {
@@ -768,10 +768,10 @@
     }
 
     async function loadAnalytics() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
         const today = new Date().toISOString().split('T')[0];
-        const { data } = await supabase.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
+        const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
         if (!data || data.length === 0) return;
 
         const peopleByHour = {};
@@ -811,7 +811,7 @@
         if (peopleChart) peopleChart.destroy();
         peopleChart = new Chart(ctx1, {
           type: 'line',
-          data: { labels: peopleLabels, datasets: [{ label: '人数', data: avgPeopleArr, borderColor: '#3498db', backgroundColor: 'rgba(52,152,219,.1)', fill: true, tension: .4 }] },
+          data: { labels: peopleLabels, datasets: [{ label: '浜烘暟', data: avgPeopleArr, borderColor: '#3498db', backgroundColor: 'rgba(52,152,219,.1)', fill: true, tension: .4 }] },
           options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
 
@@ -821,7 +821,7 @@
         if (equipmentChart) equipmentChart.destroy();
         equipmentChart = new Chart(ctx2, {
           type: 'bar',
-          data: { labels: ['器械1', '器械2'], datasets: [{ label: '使用次数', data: [totalEq1, totalEq2], backgroundColor: ['#3498db', '#2ecc71'], borderRadius: 8 }] },
+          data: { labels: ['鍣ㄦ1', '鍣ㄦ2'], datasets: [{ label: '浣跨敤娆℃暟', data: [totalEq1, totalEq2], backgroundColor: ['#3498db', '#2ecc71'], borderRadius: 8 }] },
           options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
         });
 
@@ -835,29 +835,29 @@
         const sorted = avgPeopleArr.map((v, i) => ({ hour: i, avg: v })).filter(x => x.avg > 0).sort((a,b) => b.avg - a.avg);
         if (sorted.length > 0) {
           document.getElementById('a-peakHour').textContent = sorted[0].hour + ':00';
-          document.getElementById('peakHoursInfo').innerHTML = sorted.slice(0, 3).map(h => `<p><span class="peak">${h.hour}:00</span> - 平均 ${h.avg.toFixed(1)} 人</p>`).join('');
-          document.getElementById('quietHoursInfo').innerHTML = sorted.slice(-3).reverse().map(h => `<p><span class="quiet">${h.hour}:00</span> - 平均 ${h.avg.toFixed(1)} 人</p>`).join('');
+          document.getElementById('peakHoursInfo').innerHTML = sorted.slice(0, 3).map(h => `<p><span class="peak">${h.hour}:00</span> - 骞冲潎 ${h.avg.toFixed(1)} 浜?/p>`).join('');
+          document.getElementById('quietHoursInfo').innerHTML = sorted.slice(-3).reverse().map(h => `<p><span class="quiet">${h.hour}:00</span> - 骞冲潎 ${h.avg.toFixed(1)} 浜?/p>`).join('');
         }
       } catch (e) { console.error('Load analytics error:', e); }
     }
 
     async function loadHistory() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
-        const { data, error } = await supabase.from('gym_history').select('*').order('create_time', { ascending: false }).limit(100);
+        const { data, error } = await supabaseClient.from('gym_history').select('*').order('create_time', { ascending: false }).limit(100);
         if (error) throw error;
         const tbody = document.getElementById('historyTableBody');
         if (!data || data.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="8" class="no-data">暂无历史记录</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="8" class="no-data">鏆傛棤鍘嗗彶璁板綍</td></tr>';
           return;
         }
         tbody.innerHTML = data.map(r => `<tr>
           <td>${new Date(r.create_time).toLocaleString('zh-CN')}</td>
           <td>${r.current_people}</td>
-          <td>${r.temperature !== null ? r.temperature + '℃' : '--'}</td>
+          <td>${r.temperature !== null ? r.temperature + '鈩? : '--'}</td>
           <td>${r.humidity !== null ? r.humidity + '%' : '--'}</td>
-          <td class="${r.equipment1 ? 'status-on' : 'status-off'}">${r.equipment1 ? '占用' : '空闲'}</td>
-          <td class="${r.equipment2 ? 'status-on' : 'status-off'}">${r.equipment2 ? '占用' : '空闲'}</td>
+          <td class="${r.equipment1 ? 'status-on' : 'status-off'}">${r.equipment1 ? '鍗犵敤' : '绌洪棽'}</td>
+          <td class="${r.equipment2 ? 'status-on' : 'status-off'}">${r.equipment2 ? '鍗犵敤' : '绌洪棽'}</td>
           <td>${r.equipment1_count}</td>
           <td>${r.equipment2_count}</td>
         </tr>`).join('');
@@ -865,79 +865,79 @@
     }
 
     async function loadAdminBookings() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
-        const { data, error } = await supabase.from('gym_bookings').select('*').in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
+        const { data, error } = await supabaseClient.from('gym_bookings').select('*').in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
         if (error) throw error;
         const el = document.getElementById('admin-bookings');
-        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">暂无预约记录</div>'; return; }
-        el.innerHTML = `<table class="data-table"><thead><tr><th>用户</th><th>器械</th><th>日期</th><th>时段</th><th>状态</th><th>操作</th></tr></thead><tbody>
+        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">鏆傛棤棰勭害璁板綍</div>'; return; }
+        el.innerHTML = `<table class="data-table"><thead><tr><th>鐢ㄦ埛</th><th>鍣ㄦ</th><th>鏃ユ湡</th><th>鏃舵</th><th>鐘舵€?/th><th>鎿嶄綔</th></tr></thead><tbody>
           ${data.map(b => `<tr>
-            <td>${b.username}</td><td>器械${b.equipment_id}</td><td>${b.booking_date}</td>
+            <td>${b.username}</td><td>鍣ㄦ${b.equipment_id}</td><td>${b.booking_date}</td>
             <td>${b.start_time ? b.start_time.substring(0,5) : '--'}-${b.end_time ? b.end_time.substring(0,5) : '--'}</td>
             <td style="color:${b.status === 'confirmed' ? '#27ae60' : '#e74c3c'}">${b.status}</td>
-            <td><button class="btn btn-red btn-sm" onclick="adminCancelBooking(${b.id})">取消</button></td>
+            <td><button class="btn btn-red btn-sm" onclick="adminCancelBooking(${b.id})">鍙栨秷</button></td>
           </tr>`).join('')}</tbody></table>`;
       } catch (e) { console.error('Load admin bookings error:', e); }
     }
 
     async function adminCancelBooking(id) {
-      if (!confirm('确定取消此预约？')) return;
+      if (!confirm('纭畾鍙栨秷姝ら绾︼紵')) return;
       try {
-        await supabase.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
+        await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
         loadAdminBookings();
-      } catch (e) { alert('取消失败: ' + e.message); }
+      } catch (e) { alert('鍙栨秷澶辫触: ' + e.message); }
     }
 
     async function loadAdminUsers() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
-        const { data, error } = await supabase.from('gym_users').select('*').order('create_time', { ascending: false });
+        const { data, error } = await supabaseClient.from('gym_users').select('*').order('create_time', { ascending: false });
         if (error) throw error;
         const el = document.getElementById('admin-users');
-        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">暂无用户</div>'; return; }
-        el.innerHTML = `<table class="data-table"><thead><tr><th>ID</th><th>用户名</th><th>角色</th><th>手机</th><th>邮箱</th><th>注册时间</th><th>操作</th></tr></thead><tbody>
+        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">鏆傛棤鐢ㄦ埛</div>'; return; }
+        el.innerHTML = `<table class="data-table"><thead><tr><th>ID</th><th>鐢ㄦ埛鍚?/th><th>瑙掕壊</th><th>鎵嬫満</th><th>閭</th><th>娉ㄥ唽鏃堕棿</th><th>鎿嶄綔</th></tr></thead><tbody>
           ${data.map(u => `<tr>
-            <td>${u.id}</td><td>${u.username}${u.username === 'admin' ? ' <span style="color:#e74c3c;font-size:12px;">(默认)</span>' : ''}</td>
-            <td style="color:${u.role === 'admin' ? '#e74c3c' : '#3498db'};font-weight:bold;">${u.role === 'admin' ? '管理员' : '普通用户'}</td>
+            <td>${u.id}</td><td>${u.username}${u.username === 'admin' ? ' <span style="color:#e74c3c;font-size:12px;">(榛樿)</span>' : ''}</td>
+            <td style="color:${u.role === 'admin' ? '#e74c3c' : '#3498db'};font-weight:bold;">${u.role === 'admin' ? '绠＄悊鍛? : '鏅€氱敤鎴?}</td>
             <td>${u.phone || '--'}</td><td>${u.email || '--'}</td>
             <td>${u.create_time ? new Date(u.create_time).toLocaleString('zh-CN') : '--'}</td>
-            <td>${u.username !== 'admin' ? `<button class="btn btn-blue btn-sm" onclick="toggleRole(${u.id},'${u.role}')">${u.role === 'admin' ? '降为用户' : '升为管理员'}</button> ${u.username !== currentUser.username ? `<button class="btn btn-red btn-sm" onclick="deleteUser(${u.id},'${u.username}')">删除</button>` : ''}` : '<span style="color:#999;">不可修改</span>'}</td>
+            <td>${u.username !== 'admin' ? `<button class="btn btn-blue btn-sm" onclick="toggleRole(${u.id},'${u.role}')">${u.role === 'admin' ? '闄嶄负鐢ㄦ埛' : '鍗囦负绠＄悊鍛?}</button> ${u.username !== currentUser.username ? `<button class="btn btn-red btn-sm" onclick="deleteUser(${u.id},'${u.username}')">鍒犻櫎</button>` : ''}` : '<span style="color:#999;">涓嶅彲淇敼</span>'}</td>
           </tr>`).join('')}</tbody></table>`;
       } catch (e) { console.error('Load admin users error:', e); }
     }
 
     async function toggleRole(userId, currentRole) {
       const newRole = currentRole === 'admin' ? 'user' : 'admin';
-      if (!confirm(`确定要${currentRole === 'admin' ? '降级' : '升级'}该用户吗？`)) return;
+      if (!confirm(`纭畾瑕?{currentRole === 'admin' ? '闄嶇骇' : '鍗囩骇'}璇ョ敤鎴峰悧锛焋)) return;
       try {
-        await supabase.from('gym_users').update({ role: newRole }).eq('id', userId);
+        await supabaseClient.from('gym_users').update({ role: newRole }).eq('id', userId);
         loadAdminUsers();
-      } catch (e) { alert('操作失败: ' + e.message); }
+      } catch (e) { alert('鎿嶄綔澶辫触: ' + e.message); }
     }
 
     async function deleteUser(userId, username) {
-      if (!confirm(`确定要删除用户 "${username}" 吗？该操作不可恢复！`)) return;
+      if (!confirm(`纭畾瑕佸垹闄ょ敤鎴?"${username}" 鍚楋紵璇ユ搷浣滀笉鍙仮澶嶏紒`)) return;
       try {
-        await supabase.from('gym_bookings').delete().eq('user_id', userId);
-        await supabase.from('gym_users').delete().eq('id', userId);
+        await supabaseClient.from('gym_bookings').delete().eq('user_id', userId);
+        await supabaseClient.from('gym_users').delete().eq('id', userId);
         loadAdminUsers();
-      } catch (e) { alert('删除失败: ' + e.message); }
+      } catch (e) { alert('鍒犻櫎澶辫触: ' + e.message); }
     }
 
     async function loadAdminAnalytics() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       try {
         const today = new Date().toISOString().split('T')[0];
-        const { data } = await supabase.from('gym_history').select('*').gte('create_time', today + 'T00:00:00');
+        const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00');
         const el = document.getElementById('admin-analytics');
-        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">今日暂无数据</div>'; return; }
+        if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">浠婃棩鏆傛棤鏁版嵁</div>'; return; }
         const avgPeople = data.reduce((s, r) => s + r.current_people, 0) / data.length;
         const maxPeople = Math.max(...data.map(r => r.current_people));
         el.innerHTML = `<div class="stats-grid">
-          <div class="stat-card"><div class="stat-value">${avgPeople.toFixed(1)}</div><div class="stat-label">今日平均人数</div></div>
-          <div class="stat-card"><div class="stat-value">${maxPeople}</div><div class="stat-label">今日峰值人数</div></div>
-          <div class="stat-card"><div class="stat-value">${data.length}</div><div class="stat-label">今日数据条数</div></div>
+          <div class="stat-card"><div class="stat-value">${avgPeople.toFixed(1)}</div><div class="stat-label">浠婃棩骞冲潎浜烘暟</div></div>
+          <div class="stat-card"><div class="stat-value">${maxPeople}</div><div class="stat-label">浠婃棩宄板€间汉鏁?/div></div>
+          <div class="stat-card"><div class="stat-value">${data.length}</div><div class="stat-label">浠婃棩鏁版嵁鏉℃暟</div></div>
         </div>`;
       } catch (e) { console.error('Load admin analytics error:', e); }
     }
@@ -953,3 +953,4 @@
   </script>
 </body>
 </html>
+
