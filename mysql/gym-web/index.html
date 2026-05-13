@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -742,16 +742,30 @@
       try {
         const today = new Date().toISOString().split('T')[0];
         const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
-        if (!data || data.length === 0) return;
+        
+        let todayBookingCount = 0;
+        try {
+          const { data: bookings } = await supabaseClient.from('gym_bookings').select('id').eq('booking_date', today).in('status', ['confirmed', 'pending']);
+          todayBookingCount = bookings ? bookings.length : 0;
+        } catch (e) { console.error('Get bookings error:', e); }
+        
+        if (!data || data.length === 0) {
+          document.getElementById('a-avgPeople').textContent = '0';
+          document.getElementById('a-maxPeople').textContent = '0';
+          document.getElementById('a-totalBookings').textContent = todayBookingCount;
+          return;
+        }
 
         const peopleByHour = {};
         const eq1ByHour = {};
         const eq2ByHour = {};
         for (let i = 0; i < 24; i++) { peopleByHour[i] = []; eq1ByHour[i] = 0; eq2ByHour[i] = 0; }
 
+        let maxPeopleLimit = 50;
         data.forEach(r => {
           const h = new Date(r.create_time).getHours();
           peopleByHour[h].push(r.current_people);
+          if (r.max_people && r.max_people > maxPeopleLimit) maxPeopleLimit = r.max_people;
         });
 
         const eq1First = {}, eq1Last = {}, eq2First = {}, eq2Last = {};
@@ -776,13 +790,68 @@
 
         const totalEq1 = Object.values(eq1ByHour).reduce((a,b) => a+b, 0);
         const totalEq2 = Object.values(eq2ByHour).reduce((a,b) => a+b, 0);
+        const maxDataValue = Math.max(...avgPeopleArr, 1);
+        const yMax = Math.max(Math.ceil(maxDataValue * 1.2), maxPeopleLimit);
 
         const ctx1 = document.getElementById('peopleChart').getContext('2d');
         if (peopleChart) peopleChart.destroy();
         peopleChart = new Chart(ctx1, {
           type: 'line',
-          data: { labels: peopleLabels, datasets: [{ label: '人数', data: avgPeopleArr, borderColor: '#3498db', backgroundColor: 'rgba(52,152,219,.1)', fill: true, tension: .4 }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+          data: { 
+            labels: peopleLabels, 
+            datasets: [{ 
+              label: '人数', 
+              data: avgPeopleArr, 
+              borderColor: '#3498db', 
+              backgroundColor: 'rgba(52,152,219,.2)', 
+              fill: true, 
+              tension: .3,
+              pointRadius: 3,
+              pointHoverRadius: 6,
+              pointBackgroundColor: '#3498db',
+              borderWidth: 2
+            }] 
+          },
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { 
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(0,0,0,0.8)',
+                titleFont: { size: 14 },
+                bodyFont: { size: 13 },
+                callbacks: {
+                  label: function(context) {
+                    return '人数: ' + Math.round(context.parsed.y);
+                  }
+                }
+              }
+            }, 
+            scales: { 
+              y: { 
+                beginAtZero: true,
+                max: yMax,
+                ticks: {
+                  stepSize: Math.ceil(yMax / 5),
+                  font: { size: 12 }
+                },
+                grid: {
+                  color: 'rgba(0,0,0,0.1)',
+                  drawBorder: false
+                },
+                title: {
+                  display: true,
+                  text: '人数',
+                  font: { size: 12 }
+                }
+              },
+              x: {
+                ticks: { font: { size: 10 } },
+                grid: { display: false }
+              }
+            }
+          }
         });
 
         const ctx2 = document.getElementById('equipmentChart').getContext('2d');
@@ -790,15 +859,27 @@
         equipmentChart = new Chart(ctx2, {
           type: 'bar',
           data: { labels: ['器械1', '器械2'], datasets: [{ label: '使用次数', data: [totalEq1, totalEq2], backgroundColor: ['#3498db', '#2ecc71'], borderRadius: 8 }] },
-          options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+          options: { 
+            responsive: true, 
+            maintainAspectRatio: false, 
+            plugins: { legend: { display: false } }, 
+            scales: { 
+              y: { 
+                beginAtZero: true,
+                ticks: { font: { size: 12 } },
+                grid: { color: 'rgba(0,0,0,0.1)' }
+              },
+              x: { ticks: { font: { size: 12 } } }
+            }
+          }
         });
 
         const nonZero = avgPeopleArr.filter(v => v > 0);
         const avg = nonZero.length > 0 ? (nonZero.reduce((a,b) => a+b, 0) / nonZero.length).toFixed(1) : 0;
         const maxP = Math.max(...avgPeopleArr, 0);
         document.getElementById('a-avgPeople').textContent = avg;
-        document.getElementById('a-maxPeople').textContent = maxP;
-        document.getElementById('a-totalBookings').textContent = totalEq1 + totalEq2;
+        document.getElementById('a-maxPeople').textContent = Math.round(maxP);
+        document.getElementById('a-totalBookings').textContent = todayBookingCount;
 
         const sorted = avgPeopleArr.map((v, i) => ({ hour: i, avg: v })).filter(x => x.avg > 0).sort((a,b) => b.avg - a.avg);
         if (sorted.length > 0) {
