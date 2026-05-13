@@ -58,6 +58,9 @@
         <view class="equipment-status {{equipment1 ? 'occupied' : 'free'}}">
           {{equipment1 ? '使用中' : '空闲'}}
         </view>
+        <view class="equipment-booking-status {{equipment1Booked ? 'booked' : 'available'}}">
+          {{equipment1Booked ? '已预约' : '可预约'}}
+        </view>
         <view class="equipment-count">总计 {{equipment1Count}} 次</view>
       </view>
     </view>
@@ -76,21 +79,24 @@
         <view class="equipment-status {{equipment2 ? 'occupied' : 'free'}}">
           {{equipment2 ? '使用中' : '空闲'}}
         </view>
+        <view class="equipment-booking-status {{equipment2Booked ? 'booked' : 'available'}}">
+          {{equipment2Booked ? '已预约' : '可预约'}}
+        </view>
         <view class="equipment-count">总计 {{equipment2Count}} 次</view>
       </view>
     </view>
   </view>
 
   <!-- 今日预约状态（新增） -->
-  <view class="section-title">今日预约状态</view>
+  <view class="section-title">预约状态（未来7天）</view>
   <view class="booking-container">
     <!-- 器械1预约 -->
     <view class="booking-equipment">
       <view class="booking-equipment-title">器械 1</view>
       <view class="time-slots">
         <view class="time-slot {{item.status === 'confirmed' ? 'booked' : 'available'}}" wx:for="{{equipment1Bookings}}" wx:key="startTime">
-          <text class="slot-time">{{item.startTime}}-{{item.endTime}}</text>
-          <text class="slot-status">{{item.status === 'confirmed' ? '已预约' : '待确认'}}</text>
+          <text class="slot-time">{{item.date}} {{item.startTime}}-{{item.endTime}}</text>
+          <text class="slot-status">{{item.status === 'confirmed' ? '已预约' : '待确认'}} ({{item.username}})</text>
         </view>
         <view class="no-booking" wx:if="{{equipment1Bookings.length === 0}}">暂无预约</view>
       </view>
@@ -100,8 +106,8 @@
       <view class="booking-equipment-title">器械 2</view>
       <view class="time-slots">
         <view class="time-slot {{item.status === 'confirmed' ? 'booked' : 'available'}}" wx:for="{{equipment2Bookings}}" wx:key="startTime">
-          <text class="slot-time">{{item.startTime}}-{{item.endTime}}</text>
-          <text class="slot-status">{{item.status === 'confirmed' ? '已预约' : '待确认'}}</text>
+          <text class="slot-time">{{item.date}} {{item.startTime}}-{{item.endTime}}</text>
+          <text class="slot-status">{{item.status === 'confirmed' ? '已预约' : '待确认'}} ({{item.username}})</text>
         </view>
         <view class="no-booking" wx:if="{{equipment2Bookings.length === 0}}">暂无预约</view>
       </view>

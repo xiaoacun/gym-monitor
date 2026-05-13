@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -1124,7 +1124,8 @@
             '<p><span class="peak">' + h + ':00</span> - ' + p + ' 人</p>'
           ).join('');
           
-          const quietInfo = sortedHours.slice(-3).reverse().map(([h, p]) => 
+          const quietHours = sortedHours.slice().reverse().slice(0, 3);
+          const quietInfo = quietHours.map(([h, p]) => 
             '<p><span class="quiet">' + h + ':00</span> - ' + p + ' 人</p>'
           ).join('');
           

@@ -25,6 +25,8 @@ Page({
     eq2Last1hour: 0,
     equipment1Bookings: [],
     equipment2Bookings: [],
+    equipment1Booked: false,
+    equipment2Booked: false,
     bookingDate: '',
     online: false,
     mqttConnected: false,
@@ -181,6 +183,16 @@ Page({
     return false
   },
 
+  isCurrentHourBooked(bookings, today) {
+    const now = new Date()
+    const currentHour = now.getHours()
+    const currentHourStr = currentHour.toString().padStart(2, '0') + ':00'
+    
+    return bookings.some(b => {
+      return b.booking_date === today && b.start_time && b.start_time.startsWith(currentHourStr)
+    })
+  },
+
   async loadBookingsFromSupabase() {
     try {
       const now = new Date()
@@ -212,7 +224,9 @@ Page({
             endTime: b.end_time ? b.end_time.substring(0, 5) : '--',
             username: b.username,
             status: b.status || 'confirmed',
-            date: b.booking_date || today
+            date: b.booking_date || today,
+            booking_date: b.booking_date,
+            start_time: b.start_time
           }
           
           if (b.equipment_id === 1 || b.equipment_id === '1') {
@@ -222,16 +236,24 @@ Page({
           }
         })
 
+        const equipment1Booked = this.isCurrentHourBooked(equipment1Bookings, today)
+        const equipment2Booked = this.isCurrentHourBooked(equipment2Bookings, today)
+
         this.setData({
           equipment1Bookings,
           equipment2Bookings,
+          equipment1Booked,
+          equipment2Booked,
           bookingDate: today
         })
         console.log('[Supabase] Bookings loaded:', equipment1Bookings.length, equipment2Bookings.length)
+        console.log('[Supabase] Current hour booked:', equipment1Booked, equipment2Booked)
       } else {
         this.setData({
           equipment1Bookings: [],
           equipment2Bookings: [],
+          equipment1Booked: false,
+          equipment2Booked: false,
           bookingDate: today
         })
       }

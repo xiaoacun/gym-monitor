@@ -1,0 +1,393 @@
+/* index.wxss */
+
+/* 页面容器 */
+.page-container {
+  padding: 32rpx;
+  background: linear-gradient(180deg, #4A90D9 0%, #f5f5f5 200rpx);
+  min-height: 100vh;
+}
+
+/* 头部容器 */
+.header-container {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24rpx;
+  padding: 32rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(10rpx);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.header-status {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 12rpx 24rpx;
+  border-radius: 30rpx;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: 12rpx;
+}
+
+.status-dot.online {
+  background-color: #52c41a;
+  box-shadow: 0 0 10rpx #52c41a;
+}
+
+.status-dot.offline {
+  background-color: #ff4d4f;
+  box-shadow: 0 0 10rpx #ff4d4f;
+}
+
+.status-text {
+  font-size: 24rpx;
+  color: #fff;
+}
+
+/* 人数卡片 */
+.people-card {
+  margin-top: 32rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+  text-align: center;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.people-count {
+  font-size: 120rpx;
+  font-weight: bold;
+  color: #4A90D9;
+  line-height: 1;
+}
+
+.people-label {
+  font-size: 28rpx;
+  color: #999;
+  margin-top: 16rpx;
+}
+
+.people-max {
+  font-size: 24rpx;
+  color: #ccc;
+  margin-top: 12rpx;
+}
+
+/* 进度条 */
+.progress-bar {
+  margin-top: 32rpx;
+  height: 16rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #52c41a 0%, #faad14 50%, #ff4d4f 100%);
+  border-radius: 8rpx;
+  transition: width 0.3s ease;
+}
+
+/* 区域标题 */
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+  padding-left: 12rpx;
+  border-left: 6rpx solid #4A90D9;
+}
+
+/* 环境容器 */
+.env-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 24rpx;
+}
+
+.env-item {
+  flex: 1;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.env-icon {
+  width: 64rpx;
+  height: 64rpx;
+  margin-right: 24rpx;
+}
+
+.env-info {
+  flex: 1;
+}
+
+.env-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.env-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+/* 器械容器 */
+.equipment-container {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.equipment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.equipment-item:last-child {
+  border-bottom: none;
+}
+
+.equipment-items {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.equipment-items:last-child {
+  border-bottom: none;
+}
+
+.equipment-item-left {
+  display: flex;
+  align-items: flex-start;
+}
+
+.equipment-icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 20rpx;
+  margin-top: 4rpx;
+}
+
+.equipment-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.equipment-name {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.equipment-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.stat-text {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.equipment-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+}
+
+.equipment-status {
+  padding: 12rpx 24rpx;
+  border-radius: 20rpx;
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+.equipment-status.occupied {
+  background: #fff1f0;
+  color: #ff4d4f;
+}
+
+.equipment-status.free {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+.equipment-booking-status {
+  padding: 8rpx 16rpx;
+  border-radius: 16rpx;
+  font-size: 22rpx;
+  margin-top: 8rpx;
+}
+
+.equipment-booking-status.booked {
+  background: #fff7e6;
+  color: #fa8c16;
+}
+
+.equipment-booking-status.available {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.equipment-count {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 重置按钮容器 */
+.reset-container {
+  margin-top: 48rpx;
+}
+
+.reset-btn {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 44rpx;
+  padding: 28rpx 0;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 107, 0.4);
+}
+
+.reset-btn::after {
+  border: none;
+}
+
+.reset-btn:active {
+  opacity: 0.8;
+}
+
+/* 更新时间 */
+.update-time {
+  text-align: center;
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 32rpx;
+}
+
+/* 预约状态容器 */
+.booking-container {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.booking-equipment {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.booking-equipment:last-child {
+  border-bottom: none;
+}
+
+.booking-equipment-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.time-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  min-width: 140rpx;
+}
+
+.time-slot.booked {
+  background: #fff1f0;
+  border: 1rpx solid #ffccc7;
+}
+
+.time-slot.available {
+  background: #f6ffed;
+  border: 1rpx solid #b7eb8f;
+}
+
+.slot-time {
+  font-size: 24rpx;
+  color: #333;
+  font-weight: bold;
+}
+
+.slot-status {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.time-slot.booked .slot-status {
+  color: #ff4d4f;
+}
+
+.time-slot.available .slot-status {
+  color: #52c41a;
+}
+
+.no-booking {
+  font-size: 24rpx;
+  color: #ccc;
+  padding: 16rpx;
+}
+
+/* 注册提示 */
+.register-tip {
+  margin-top: 32rpx;
+  background: #fff3cd;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: #856404;
+}
+
+.tip-url {
+  font-size: 22rpx;
+  color: #e6a23c;
+  word-break: break-all;
+}
