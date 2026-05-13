@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -621,14 +621,37 @@
     }
 
     async function cancelBooking(bookingId) {
+      if (!bookingId) {
+        alert('❌ 预约ID无效');
+        return;
+      }
       const confirmed = confirm('⚠️ 确定要取消这个预约吗？\n\n此操作不可撤销！');
       if (!confirmed) return;
+      
+      if (!supabaseClient) {
+        alert('❌ 数据库未连接，请刷新页面重试');
+        return;
+      }
+      
       try {
-        const { error } = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
-        if (error) throw error;
+        const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
+        if (result.error) {
+          console.error('Cancel booking error:', result.error);
+          alert('❌ 取消失败: ' + (result.error.message || '未知错误'));
+          return;
+        }
         alert('✅ 预约已取消');
-        loadDashboard();
-      } catch (e) { alert('❌ 取消失败: ' + e.message); }
+        setTimeout(() => {
+          try {
+            loadDashboard();
+          } catch (e) {
+            console.error('Reload dashboard error:', e);
+          }
+        }, 100);
+      } catch (e) {
+        console.error('Cancel booking exception:', e);
+        alert('❌ 取消失败: ' + (e.message || '网络错误'));
+      }
     }
 
     function initBookingPage() {
@@ -981,11 +1004,27 @@
     }
 
     async function adminCancelBooking(id) {
-      if (!confirm('确定取消此预约？')) return;
+      if (!id) return;
+      const confirmed = confirm('⚠️ 确定取消此预约？\n\n此操作不可撤销！');
+      if (!confirmed) return;
+      
+      if (!supabaseClient) {
+        alert('❌ 数据库未连接');
+        return;
+      }
+      
       try {
-        await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
-        loadAdminBookings();
-      } catch (e) { alert('取消失败: ' + e.message); }
+        const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
+        if (result.error) {
+          alert('❌ 取消失败: ' + (result.error.message || '未知错误'));
+          return;
+        }
+        alert('✅ 已取消');
+        setTimeout(() => loadAdminBookings(), 100);
+      } catch (e) {
+        console.error('Admin cancel error:', e);
+        alert('❌ 取消失败: ' + (e.message || '网络错误'));
+      }
     }
 
     async function loadAdminUsers() {
