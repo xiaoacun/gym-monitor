@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -621,13 +621,14 @@
     }
 
     async function cancelBooking(bookingId) {
-      if (!confirm('确定要取消这个预约吗？')) return;
+      const confirmed = confirm('⚠️ 确定要取消这个预约吗？\n\n此操作不可撤销！');
+      if (!confirmed) return;
       try {
         const { error } = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
         if (error) throw error;
-        alert('预约已取消');
+        alert('✅ 预约已取消');
         loadDashboard();
-      } catch (e) { alert('取消失败: ' + e.message); }
+      } catch (e) { alert('❌ 取消失败: ' + e.message); }
     }
 
     function initBookingPage() {
