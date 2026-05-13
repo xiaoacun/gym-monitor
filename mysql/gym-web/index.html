@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -87,6 +87,7 @@
     .time-slot:hover { border-color: #3498db; background: #e8f4fd; transform: translateY(-2px); }
     .time-slot.selected { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: #5a67d8; color: white; }
     .time-slot.booked { background: #ecf0f1; border-color: #e74c3c; opacity: .6; cursor: not-allowed; }
+    .time-slot.past { background: #f5f5f5; border-color: #bdc3c7; opacity: .5; cursor: not-allowed; }
     .slot-time { font-size: 12px; font-weight: bold; margin-bottom: 2px; }
     .slot-status { font-size: 10px; color: #7f8c8d; }
     .time-slot.selected .slot-status { color: rgba(255,255,255,.9); }
@@ -242,7 +243,7 @@
           </div>
           <div class="form-group">
             <label>选择日期</label>
-            <input type="date" id="bookingDate" onchange="checkBookings()">
+            <input type="date" id="bookingDate" onchange="onDateChange()">
             <div class="form-hint">只可选择今天及以后的日期</div>
           </div>
           <div class="form-group">
@@ -641,6 +642,10 @@
           }
           showNotification('✅ 预约已取消', 'success');
           loadDashboard();
+          if (selectedEquipment) {
+            renderTimeSlots();
+            checkBookings();
+          }
         } catch (e) {
           console.error('Cancel booking exception:', e);
           showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
@@ -713,25 +718,38 @@
 
     function renderTimeSlots() {
       const container = document.getElementById('timeSlots');
-      container.innerHTML = FIXED_TIME_SLOTS.map(s => '<div class="time-slot" id="slot-' + s.id + '" onclick="selectTimeSlot(' + s.id + ')"><div class="slot-time">' + s.time + '</div><div class="slot-status">✓ 可预约</div></div>').join('');
+      const now = new Date();
+      const currentHour = now.getHours();
+      const bookingDate = document.getElementById('bookingDate').value;
+      const today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+      
+      container.innerHTML = FIXED_TIME_SLOTS.map(s => {
+        const slotHour = parseInt(s.start.split(':')[0]);
+        const isPast = (bookingDate === today && slotHour <= currentHour);
+        const slotClass = isPast ? 'time-slot past' : 'time-slot';
+        const statusText = isPast ? '⏰ 已过时' : '✓ 可预约';
+        const style = isPast ? 'opacity:0.5;cursor:not-allowed;' : '';
+        return '<div class="' + slotClass + '" id="slot-' + s.id + '" onclick="selectTimeSlot(' + s.id + ')" style="' + style + '"><div class="slot-time">' + s.time + '</div><div class="slot-status">' + statusText + '</div></div>';
+      }).join('');
     }
 
     function selectEquipment(eq) {
       selectedEquipment = eq;
       document.querySelectorAll('.equipment-option').forEach(el => el.classList.remove('selected'));
       document.getElementById('eq-opt-' + eq).classList.add('selected');
+      renderTimeSlots();
       checkBookings();
       updateSubmitBtn();
     }
 
     function selectTimeSlot(id) {
       const slotEl = document.getElementById('slot-' + id);
-      if (slotEl.classList.contains('booked')) return;
+      if (slotEl.classList.contains('booked') || slotEl.classList.contains('past')) return;
       selectedSlot = FIXED_TIME_SLOTS.find(s => s.id === id);
       document.querySelectorAll('.time-slot').forEach(el => {
         el.classList.remove('selected');
         const st = el.querySelector('.slot-status');
-        if (st && !el.classList.contains('booked')) st.textContent = '✓ 可预约';
+        if (st && !el.classList.contains('booked') && !el.classList.contains('past')) st.textContent = '✓ 可预约';
       });
       slotEl.classList.add('selected');
       slotEl.querySelector('.slot-status').textContent = '✓ 已选择';
@@ -745,11 +763,13 @@
       try {
         const { data } = await supabaseClient.from('gym_bookings').select('start_time,end_time,username').eq('equipment_id', selectedEquipment).eq('booking_date', bookingDate).in('status', ['confirmed', 'pending']);
         document.querySelectorAll('.time-slot').forEach(el => {
-          el.classList.remove('booked');
-          el.style.opacity = '1';
-          el.style.cursor = 'pointer';
-          const st = el.querySelector('.slot-status');
-          if (st && !el.classList.contains('selected')) st.textContent = '✓ 可预约';
+          if (!el.classList.contains('past')) {
+            el.classList.remove('booked');
+            el.style.opacity = '1';
+            el.style.cursor = 'pointer';
+            const st = el.querySelector('.slot-status');
+            if (st && !el.classList.contains('selected')) st.textContent = '✓ 可预约';
+          }
         });
         if (data) {
           data.forEach(b => {
@@ -758,12 +778,12 @@
             const bookedTime = startStr + '-' + endStr;
             document.querySelectorAll('.time-slot').forEach(el => {
               const slotTime = el.querySelector('.slot-time').textContent;
-              if (slotTime === bookedTime) {
+              if (slotTime === bookedTime && !el.classList.contains('past')) {
                 el.classList.add('booked');
                 el.style.opacity = '0.5';
                 el.style.cursor = 'not-allowed';
                 const st = el.querySelector('.slot-status');
-                if (st) st.textContent = '× 已被 ' + b.username + ' 预约';
+                if (st) st.textContent = '🔒 ' + b.username + ' 占用';
               }
             });
           });
@@ -780,6 +800,15 @@
         btn.disabled = true;
         btn.textContent = '请先选择器械和时段';
       }
+    }
+
+    function onDateChange() {
+      renderTimeSlots();
+      selectedSlot = null;
+      if (selectedEquipment) {
+        checkBookings();
+      }
+      updateSubmitBtn();
     }
 
     async function submitBooking() {
@@ -804,10 +833,11 @@
         if (error) throw error;
 
         showBookingMsg('预约成功！', 'success');
-        selectedEquipment = null;
         selectedSlot = null;
         document.querySelectorAll('.equipment-option').forEach(el => el.classList.remove('selected'));
+        selectedEquipment = null;
         renderTimeSlots();
+        checkBookings();
         updateSubmitBtn();
       } catch (e) { showBookingMsg('预约失败: ' + e.message, 'error'); }
     }
@@ -1063,6 +1093,10 @@
           }
           showNotification('✅ 已取消', 'success');
           loadAdminBookings();
+          if (selectedEquipment) {
+            renderTimeSlots();
+            checkBookings();
+          }
         } catch (e) {
           console.error('Admin cancel error:', e);
           showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
