@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -625,27 +625,27 @@
         showNotification('❌ 预约ID无效', 'error');
         return;
       }
-      const confirmed = confirm('⚠️ 确定要取消这个预约吗？\n\n此操作不可撤销！');
-      if (!confirmed) return;
       
-      if (!supabaseClient) {
-        showNotification('❌ 数据库未连接，请刷新页面重试', 'error');
-        return;
-      }
-      
-      try {
-        const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
-        if (result.error) {
-          console.error('Cancel booking error:', result.error);
-          showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
+      showConfirm('⚠️ 确定要取消这个预约吗？<br><small>此操作不可撤销</small>', async () => {
+        if (!supabaseClient) {
+          showNotification('❌ 数据库未连接，请刷新页面重试', 'error');
           return;
         }
-        showNotification('✅ 预约已取消', 'success');
-        loadDashboard();
-      } catch (e) {
-        console.error('Cancel booking exception:', e);
-        showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
-      }
+        
+        try {
+          const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
+          if (result.error) {
+            console.error('Cancel booking error:', result.error);
+            showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
+            return;
+          }
+          showNotification('✅ 预约已取消', 'success');
+          loadDashboard();
+        } catch (e) {
+          console.error('Cancel booking exception:', e);
+          showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
+        }
+      });
     }
 
     function showNotification(message, type) {
@@ -667,6 +667,33 @@
         toast.style.transition = 'opacity 0.3s ease';
         setTimeout(() => toast.remove(), 300);
       }, 2000);
+    }
+
+    function showConfirm(message, onConfirm) {
+      const existing = document.querySelector('.confirm-dialog');
+      if (existing) existing.remove();
+      
+      const overlay = document.createElement('div');
+      overlay.className = 'confirm-dialog';
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;justify-content:center;align-items:center;';
+      
+      const dialog = document.createElement('div');
+      dialog.style.cssText = 'background:white;padding:24px;border-radius:12px;box-shadow:0 10px 40px rgba(0,0,0,0.2);max-width:400px;text-align:center;';
+      dialog.innerHTML = '<p style="margin:0 0 20px;font-size:16px;color:#333;">' + message + '</p><div style="display:flex;gap:12px;justify-content:center;"><button id="confirmYes" style="padding:10px 24px;background:#e74c3c;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;">确认</button><button id="confirmNo" style="padding:10px 24px;background:#95a5a6;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px;">取消</button></div>';
+      
+      overlay.appendChild(dialog);
+      document.body.appendChild(overlay);
+      
+      document.getElementById('confirmYes').onclick = () => {
+        overlay.remove();
+        onConfirm();
+      };
+      document.getElementById('confirmNo').onclick = () => {
+        overlay.remove();
+      };
+      overlay.onclick = (e) => {
+        if (e.target === overlay) overlay.remove();
+      };
     }
 
     function initBookingPage() {
@@ -1021,26 +1048,26 @@
 
     async function adminCancelBooking(id) {
       if (!id) return;
-      const confirmed = confirm('⚠️ 确定取消此预约？\n\n此操作不可撤销！');
-      if (!confirmed) return;
       
-      if (!supabaseClient) {
-        showNotification('❌ 数据库未连接', 'error');
-        return;
-      }
-      
-      try {
-        const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
-        if (result.error) {
-          showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
+      showConfirm('⚠️ 确定取消此预约？<br><small>此操作不可撤销</small>', async () => {
+        if (!supabaseClient) {
+          showNotification('❌ 数据库未连接', 'error');
           return;
         }
-        showNotification('✅ 已取消', 'success');
-        loadAdminBookings();
-      } catch (e) {
-        console.error('Admin cancel error:', e);
-        showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
-      }
+        
+        try {
+          const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
+          if (result.error) {
+            showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
+            return;
+          }
+          showNotification('✅ 已取消', 'success');
+          loadAdminBookings();
+        } catch (e) {
+          console.error('Admin cancel error:', e);
+          showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
+        }
+      });
     }
 
     async function loadAdminUsers() {
@@ -1056,20 +1083,23 @@
 
     async function toggleRole(userId, currentRole) {
       const newRole = currentRole === 'admin' ? 'user' : 'admin';
-      if (!confirm('确定要' + (currentRole === 'admin' ? '降级' : '升级') + '该用户吗？')) return;
-      try {
-        await supabaseClient.from('gym_users').update({ role: newRole }).eq('id', userId);
-        loadAdminUsers();
-      } catch (e) { alert('操作失败: ' + e.message); }
+      const action = currentRole === 'admin' ? '降级' : '升级';
+      showConfirm('确定要' + action + '该用户吗？', async () => {
+        try {
+          await supabaseClient.from('gym_users').update({ role: newRole }).eq('id', userId);
+          loadAdminUsers();
+        } catch (e) { showNotification('操作失败: ' + e.message, 'error'); }
+      });
     }
 
     async function deleteUser(userId, username) {
-      if (!confirm('确定要删除用户 "' + username + '" 吗？该操作不可恢复！')) return;
-      try {
-        await supabaseClient.from('gym_bookings').delete().eq('user_id', userId);
-        await supabaseClient.from('gym_users').delete().eq('id', userId);
-        loadAdminUsers();
-      } catch (e) { alert('删除失败: ' + e.message); }
+      showConfirm('确定要删除用户 "' + username + '" 吗？<br><small style="color:#e74c3c;">该操作不可恢复！</small>', async () => {
+        try {
+          await supabaseClient.from('gym_bookings').delete().eq('user_id', userId);
+          await supabaseClient.from('gym_users').delete().eq('id', userId);
+          loadAdminUsers();
+        } catch (e) { showNotification('删除失败: ' + e.message, 'error'); }
+      });
     }
 
     async function loadAdminAnalytics() {
