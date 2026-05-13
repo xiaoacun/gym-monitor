@@ -1082,7 +1082,12 @@
           }
         });
 
-        const totalPeople = data && data.length > 0 ? data.reduce((sum, r) => sum + r.current_people, 0) : 0;
+        let totalPeople = 0;
+        if (data && data.length > 0) {
+          const lastRecord = data[data.length - 1];
+          const firstRecord = data[0];
+          totalPeople = (lastRecord.total_entered || 0) - (firstRecord.total_entered || 0);
+        }
         
         const maxPeopleByHour = {};
         for (let i = 0; i < 24; i++) { maxPeopleByHour[i] = 0; }
