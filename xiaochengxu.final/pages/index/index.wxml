@@ -101,6 +101,7 @@
   <!-- 注册提示 -->
   <view class="register-tip">
     <text class="tip-text">如需预约器械，请先在网页端注册账号</text>
+    <text class="tip-url">网页地址：https://xiaoacun.github.io/gym-monitor/</text>
   </view>
 
   <!-- 更新时间 -->
