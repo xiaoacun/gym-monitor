@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -896,7 +896,15 @@
       try {
         const now = new Date();
         const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
+        console.log('[Analytics] Today:', today);
+        
+        const { data, error } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
+        console.log('[Analytics] gym_history data:', data ? data.length : 0, 'records');
+        if (error) console.error('[Analytics] gym_history error:', error);
+        if (data && data.length > 0) {
+          console.log('[Analytics] First record:', data[0]);
+          console.log('[Analytics] Last record:', data[data.length-1]);
+        }
         
         let todayBookingCount = 0;
         let eq1Bookings = 0, eq2Bookings = 0;
