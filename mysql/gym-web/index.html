@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -896,9 +896,13 @@
       try {
         const now = new Date();
         const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-        console.log('[Analytics] Today:', today);
         
-        const { data, error } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+        const todayStartUTC = todayStart.toISOString();
+        console.log('[Analytics] Today (local):', today);
+        console.log('[Analytics] Query start (UTC):', todayStartUTC);
+        
+        const { data, error } = await supabaseClient.from('gym_history').select('*').gte('create_time', todayStartUTC).order('create_time', { ascending: true });
         console.log('[Analytics] gym_history data:', data ? data.length : 0, 'records');
         if (error) console.error('[Analytics] gym_history error:', error);
         if (data && data.length > 0) {
