@@ -48,17 +48,12 @@
         <image src="/图片/设备状态.png" class="equipment-icon" mode="aspectFit"/>
         <view class="equipment-info">
           <view class="equipment-name">器械 1</view>
-          <view class="equipment-stats">
-            <text class="stat-text">10分钟: {{eq1Last10min}}次</text>
-            <text class="stat-text">1小时: {{eq1Last1hour}}次</text>
-          </view>
         </view>
       </view>
       <view class="equipment-right">
         <view class="equipment-status {{equipment1 || equipment1Booked ? 'occupied' : 'free'}}">
           {{equipment1 || equipment1Booked ? '占用' : '空闲'}}
         </view>
-        <view class="equipment-count">总计 {{equipment1Count}} 次</view>
       </view>
     </view>
     <view class="equipment-items">
@@ -66,22 +61,17 @@
         <image src="/图片/设备状态.png" class="equipment-icon" mode="aspectFit"/>
         <view class="equipment-info">
           <view class="equipment-name">器械 2</view>
-          <view class="equipment-stats">
-            <text class="stat-text">10分钟: {{eq2Last10min}}次</text>
-            <text class="stat-text">1小时: {{eq2Last1hour}}次</text>
-          </view>
         </view>
       </view>
       <view class="equipment-right">
         <view class="equipment-status {{equipment2 || equipment2Booked ? 'occupied' : 'free'}}">
           {{equipment2 || equipment2Booked ? '占用' : '空闲'}}
         </view>
-        <view class="equipment-count">总计 {{equipment2Count}} 次</view>
       </view>
     </view>
   </view>
 
-  <!-- 今日预约状态（新增） -->
+  <!-- 今日预约状态 -->
   <view class="section-title">预约状态（未来7天）</view>
   <view class="booking-container">
     <!-- 器械1预约 -->
@@ -106,11 +96,6 @@
         <view class="no-booking" wx:if="{{equipment2Bookings.length === 0}}">暂无预约</view>
       </view>
     </view>
-  </view>
-
-  <!-- 重置按钮 -->
-  <view class="reset-container">
-    <button class="reset-btn" bindtap="resetPeopleCount">重置人数计数</button>
   </view>
 
   <!-- 注册提示 -->
