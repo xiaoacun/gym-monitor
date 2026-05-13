@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -944,8 +944,14 @@
             if (!(h in eq2First)) { eq2First[h] = r.equipment2_count; eq2Last[h] = r.equipment2_count; }
             eq2Last[h] = r.equipment2_count;
           });
-          Object.keys(eq1Last).forEach(h => { eq1ByHour[h] = eq1Last[h] - eq1First[h]; });
-          Object.keys(eq2Last).forEach(h => { eq2ByHour[h] = eq2Last[h] - eq2First[h]; });
+          Object.keys(eq1Last).forEach(h => { 
+            const diff = eq1Last[h] - eq1First[h];
+            eq1ByHour[h] = diff >= 0 ? diff : eq1Last[h];
+          });
+          Object.keys(eq2Last).forEach(h => { 
+            const diff = eq2Last[h] - eq2First[h];
+            eq2ByHour[h] = diff >= 0 ? diff : eq2Last[h];
+          });
           totalEq1 = Object.values(eq1ByHour).reduce((a,b) => a+b, 0);
           totalEq2 = Object.values(eq2ByHour).reduce((a,b) => a+b, 0);
         }
