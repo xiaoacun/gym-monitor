@@ -257,7 +257,7 @@
       <div id="page-analytics" class="page-content hidden">
         <div class="page-header"><h1>📈 数据分析</h1></div>
         <div class="stats-grid">
-          <div class="stat-card"><div class="stat-value" id="a-avgPeople">--</div><div class="stat-label">今日平均人数</div></div>
+          <div class="stat-card"><div class="stat-value" id="a-avgPeople">--</div><div class="stat-label">今日累计人数</div></div>
           <div class="stat-card"><div class="stat-value" id="a-maxPeople">--</div><div class="stat-label">今日峰值人数</div></div>
           <div class="stat-card"><div class="stat-value" id="a-totalBookings">--</div><div class="stat-label">今日预约数</div></div>
           <div class="stat-card"><div class="stat-value" id="a-peakHour">--</div><div class="stat-label">高峰时段</div></div>
@@ -1082,18 +1082,43 @@
           }
         });
 
-        const nonZero = avgPeopleArr.filter(v => v > 0);
-        const avg = nonZero.length > 0 ? (nonZero.reduce((a,b) => a+b, 0) / nonZero.length).toFixed(1) : 0;
-        const maxP = Math.max(...avgPeopleArr, 0);
-        document.getElementById('a-avgPeople').textContent = avg;
-        document.getElementById('a-maxPeople').textContent = Math.round(maxP);
+        const totalPeople = data && data.length > 0 ? data.reduce((sum, r) => sum + r.current_people, 0) : 0;
+        
+        const maxPeopleByHour = {};
+        for (let i = 0; i < 24; i++) { maxPeopleByHour[i] = 0; }
+        
+        if (data && data.length > 0) {
+          data.forEach(r => {
+            const h = new Date(r.create_time).getHours();
+            if (r.current_people > maxPeopleByHour[h]) {
+              maxPeopleByHour[h] = r.current_people;
+            }
+          });
+        }
+        
+        const peakHourPeople = Math.max(...Object.values(maxPeopleByHour), 0);
+        const sortedHours = Object.entries(maxPeopleByHour)
+          .filter(([h, p]) => p > 0)
+          .sort((a, b) => b[1] - a[1]);
+        
+        document.getElementById('a-avgPeople').textContent = totalPeople;
+        document.getElementById('a-maxPeople').textContent = peakHourPeople;
         document.getElementById('a-totalBookings').textContent = todayBookingCount;
 
-        const sorted = avgPeopleArr.map((v, i) => ({ hour: i, avg: v })).filter(x => x.avg > 0).sort((a,b) => b.avg - a.avg);
-        if (sorted.length > 0) {
-          document.getElementById('a-peakHour').textContent = sorted[0].hour + ':00';
-          document.getElementById('peakHoursInfo').innerHTML = sorted.slice(0, 3).map(h => '<p><span class="peak">' + h.hour + ':00</span> - 平均 ' + h.avg.toFixed(1) + ' 人</p>').join('');
-          document.getElementById('quietHoursInfo').innerHTML = sorted.slice(-3).reverse().map(h => '<p><span class="quiet">' + h.hour + ':00</span> - 平均 ' + h.avg.toFixed(1) + ' 人</p>').join('');
+        if (sortedHours.length > 0) {
+          const peakHour = sortedHours[0][0];
+          document.getElementById('a-peakHour').textContent = peakHour + ':00';
+          
+          const peakInfo = sortedHours.slice(0, 3).map(([h, p]) => 
+            '<p><span class="peak">' + h + ':00</span> - ' + p + ' 人</p>'
+          ).join('');
+          
+          const quietInfo = sortedHours.slice(-3).reverse().map(([h, p]) => 
+            '<p><span class="quiet">' + h + ':00</span> - ' + p + ' 人</p>'
+          ).join('');
+          
+          document.getElementById('peakHoursInfo').innerHTML = peakInfo;
+          document.getElementById('quietHoursInfo').innerHTML = quietInfo;
         } else {
           document.getElementById('a-peakHour').textContent = '--';
           document.getElementById('peakHoursInfo').innerHTML = '<p style="color:#999;">暂无数据</p>';
