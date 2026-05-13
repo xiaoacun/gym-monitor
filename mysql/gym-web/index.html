@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -606,12 +606,16 @@
       } catch (e) { console.error('Load dashboard error:', e); }
 
       try {
-        const { data } = await supabaseClient.from('gym_bookings').select('*').eq('username', currentUser.username).in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
-        const listEl = document.getElementById('d-myBookings');
-        if (!data || data.length === 0) {
-          listEl.innerHTML = '<div class="no-data">暂无预约记录</div>';
+        if (!currentUser || !currentUser.username) {
+          document.getElementById('d-myBookings').innerHTML = '<div class="no-data">请先登录</div>';
         } else {
-          listEl.innerHTML = data.map(b => '<div class="booking-item"><div><div class="booking-equipment">器械' + b.equipment_id + '</div><div class="booking-time">⏰ ' + (b.start_time ? b.start_time.substring(0,5) : '--') + ' - ' + (b.end_time ? b.end_time.substring(0,5) : '--') + '</div><div style="font-size:12px;color:#999;">📅 ' + b.booking_date + '</div></div><button class="btn btn-red btn-sm" onclick="cancelBooking(' + b.id + ')">取消</button></div>').join('');
+          const { data } = await supabaseClient.from('gym_bookings').select('*').eq('username', currentUser.username).in('status', ['confirmed', 'pending']).order('booking_date', { ascending: true });
+          const listEl = document.getElementById('d-myBookings');
+          if (!data || data.length === 0) {
+            listEl.innerHTML = '<div class="no-data">暂无预约记录</div>';
+          } else {
+            listEl.innerHTML = data.map(b => '<div class="booking-item"><div><div class="booking-equipment">器械' + b.equipment_id + '</div><div class="booking-time">⏰ ' + (b.start_time ? b.start_time.substring(0,5) : '--') + ' - ' + (b.end_time ? b.end_time.substring(0,5) : '--') + '</div><div style="font-size:12px;color:#999;">📅 ' + b.booking_date + '</div></div><button class="btn btn-red btn-sm" onclick="cancelBooking(' + b.id + ')">取消</button></div>').join('');
+          }
         }
       } catch (e) { console.error('Load my bookings error:', e); }
     }
