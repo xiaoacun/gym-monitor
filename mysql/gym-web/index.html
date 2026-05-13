@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -1074,7 +1074,10 @@
         
         const allHours = Object.entries(maxPeopleByHour).sort((a, b) => b[1] - a[1]);
         const peakHours = allHours.filter(([h, p]) => p > 0).slice(0, 3);
-        const quietHours = allHours.slice().reverse().slice(0, 3);
+        
+        const sortedAsc = allHours.slice().reverse();
+        const minPeople = sortedAsc.length > 0 ? sortedAsc[0][1] : 0;
+        const quietHours = sortedAsc.filter(([h, p]) => p === minPeople);
         
         document.getElementById('a-avgPeople').textContent = totalPeople;
         document.getElementById('a-maxPeople').textContent = peakHourPeople;
