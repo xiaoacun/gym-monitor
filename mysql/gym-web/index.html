@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -884,6 +884,22 @@
           eq2Bookings = eq2B ? eq2B.length : 0;
         } catch (e) { console.error('Get bookings error:', e); }
         
+        let lastResetIndex = 0;
+        if (data && data.length > 0) {
+          for (let i = 1; i < data.length; i++) {
+            const prevTotal = data[i - 1].total_entered || 0;
+            const currTotal = data[i].total_entered || 0;
+            if (currTotal < prevTotal) {
+              lastResetIndex = i;
+            }
+          }
+          if (lastResetIndex > 0) {
+            console.log('[Analytics] ESP32 reset detected at index', lastResetIndex);
+          }
+        }
+        
+        const dataAfterReset = data && data.length > 0 ? data.slice(lastResetIndex) : [];
+        
         const peopleByHour = {};
         const eq1ByHour = {};
         const eq2ByHour = {};
@@ -892,15 +908,15 @@
         let maxPeopleLimit = 50;
         let totalEq1 = 0, totalEq2 = 0;
         
-        if (data && data.length > 0) {
-          data.forEach(r => {
+        if (dataAfterReset.length > 0) {
+          dataAfterReset.forEach(r => {
             const h = new Date(r.create_time).getHours();
             peopleByHour[h].push(r.current_people);
             if (r.max_people && r.max_people > maxPeopleLimit) maxPeopleLimit = r.max_people;
           });
 
           const eq1First = {}, eq1Last = {}, eq2First = {}, eq2Last = {};
-          data.forEach(r => {
+          dataAfterReset.forEach(r => {
             const h = new Date(r.create_time).getHours();
             if (!(h in eq1First)) { eq1First[h] = r.equipment1_count; eq1Last[h] = r.equipment1_count; }
             eq1Last[h] = r.equipment1_count;
@@ -1052,28 +1068,17 @@
         });
 
         let totalPeople = 0;
-        if (data && data.length > 0) {
-          let lastResetIndex = 0;
-          for (let i = 1; i < data.length; i++) {
-            const prevTotal = data[i - 1].total_entered || 0;
-            const currTotal = data[i].total_entered || 0;
-            if (currTotal < prevTotal) {
-              lastResetIndex = i;
-            }
-          }
-          const lastRecord = data[data.length - 1];
-          const resetRecord = data[lastResetIndex];
-          totalPeople = (lastRecord.total_entered || 0) - (resetRecord.total_entered || 0);
-          if (lastResetIndex > 0) {
-            console.log('[Analytics] ESP32 reset detected at index', lastResetIndex, ', totalPeople:', totalPeople);
-          }
+        if (dataAfterReset.length > 0) {
+          const lastRecord = dataAfterReset[dataAfterReset.length - 1];
+          const firstRecord = dataAfterReset[0];
+          totalPeople = (lastRecord.total_entered || 0) - (firstRecord.total_entered || 0);
         }
         
         const maxPeopleByHour = {};
         for (let i = 0; i < 24; i++) { maxPeopleByHour[i] = 0; }
         
-        if (data && data.length > 0) {
-          data.forEach(r => {
+        if (dataAfterReset.length > 0) {
+          dataAfterReset.forEach(r => {
             const h = new Date(r.create_time).getHours();
             if (r.current_people > maxPeopleByHour[h]) {
               maxPeopleByHour[h] = r.current_people;
