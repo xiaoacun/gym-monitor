@@ -174,7 +174,7 @@ Page({
     }
     if (booking.booking_date === today) {
       const startHour = parseInt(booking.start_time ? booking.start_time.split(':')[0] : 0)
-      if (startHour <= currentHour) {
+      if (startHour < currentHour) {
         return true
       }
     }

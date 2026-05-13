@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -593,7 +593,7 @@
       }
       if (booking.booking_date === today) {
         const startHour = parseInt(booking.start_time ? booking.start_time.split(':')[0] : 0);
-        if (startHour <= currentHour) {
+        if (startHour < currentHour) {
           return true;
         }
       }
@@ -767,7 +767,7 @@
       
       container.innerHTML = FIXED_TIME_SLOTS.map(s => {
         const slotHour = parseInt(s.start.split(':')[0]);
-        const isPast = (bookingDate === today && slotHour <= currentHour);
+        const isPast = (bookingDate === today && slotHour < currentHour);
         const slotClass = isPast ? 'time-slot past' : 'time-slot';
         const statusText = isPast ? '⏰ 已过时' : '✓ 可预约';
         const style = isPast ? 'opacity:0.5;cursor:not-allowed;' : '';
@@ -899,40 +899,44 @@
         const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
         
         let todayBookingCount = 0;
+        let eq1Bookings = 0, eq2Bookings = 0;
         try {
           const { data: bookings } = await supabaseClient.from('gym_bookings').select('id').eq('booking_date', today).in('status', ['confirmed', 'pending']);
           todayBookingCount = bookings ? bookings.length : 0;
+          const { data: eq1B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 1).eq('booking_date', today).in('status', ['confirmed', 'pending']);
+          eq1Bookings = eq1B ? eq1B.length : 0;
+          const { data: eq2B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 2).eq('booking_date', today).in('status', ['confirmed', 'pending']);
+          eq2Bookings = eq2B ? eq2B.length : 0;
         } catch (e) { console.error('Get bookings error:', e); }
         
-        if (!data || data.length === 0) {
-          document.getElementById('a-avgPeople').textContent = '0';
-          document.getElementById('a-maxPeople').textContent = '0';
-          document.getElementById('a-totalBookings').textContent = todayBookingCount;
-          return;
-        }
-
         const peopleByHour = {};
         const eq1ByHour = {};
         const eq2ByHour = {};
         for (let i = 0; i < 24; i++) { peopleByHour[i] = []; eq1ByHour[i] = 0; eq2ByHour[i] = 0; }
 
         let maxPeopleLimit = 50;
-        data.forEach(r => {
-          const h = new Date(r.create_time).getHours();
-          peopleByHour[h].push(r.current_people);
-          if (r.max_people && r.max_people > maxPeopleLimit) maxPeopleLimit = r.max_people;
-        });
+        let totalEq1 = 0, totalEq2 = 0;
+        
+        if (data && data.length > 0) {
+          data.forEach(r => {
+            const h = new Date(r.create_time).getHours();
+            peopleByHour[h].push(r.current_people);
+            if (r.max_people && r.max_people > maxPeopleLimit) maxPeopleLimit = r.max_people;
+          });
 
-        const eq1First = {}, eq1Last = {}, eq2First = {}, eq2Last = {};
-        data.forEach(r => {
-          const h = new Date(r.create_time).getHours();
-          if (!(h in eq1First)) { eq1First[h] = r.equipment1_count; eq1Last[h] = r.equipment1_count; }
-          eq1Last[h] = r.equipment1_count;
-          if (!(h in eq2First)) { eq2First[h] = r.equipment2_count; eq2Last[h] = r.equipment2_count; }
-          eq2Last[h] = r.equipment2_count;
-        });
-        Object.keys(eq1Last).forEach(h => { eq1ByHour[h] = eq1Last[h] - eq1First[h]; });
-        Object.keys(eq2Last).forEach(h => { eq2ByHour[h] = eq2Last[h] - eq2First[h]; });
+          const eq1First = {}, eq1Last = {}, eq2First = {}, eq2Last = {};
+          data.forEach(r => {
+            const h = new Date(r.create_time).getHours();
+            if (!(h in eq1First)) { eq1First[h] = r.equipment1_count; eq1Last[h] = r.equipment1_count; }
+            eq1Last[h] = r.equipment1_count;
+            if (!(h in eq2First)) { eq2First[h] = r.equipment2_count; eq2Last[h] = r.equipment2_count; }
+            eq2Last[h] = r.equipment2_count;
+          });
+          Object.keys(eq1Last).forEach(h => { eq1ByHour[h] = eq1Last[h] - eq1First[h]; });
+          Object.keys(eq2Last).forEach(h => { eq2ByHour[h] = eq2Last[h] - eq2First[h]; });
+          totalEq1 = Object.values(eq1ByHour).reduce((a,b) => a+b, 0);
+          totalEq2 = Object.values(eq2ByHour).reduce((a,b) => a+b, 0);
+        }
 
         const avgPeopleArr = [];
         const peopleLabels = [];
@@ -943,8 +947,6 @@
           } else { avgPeopleArr.push(0); }
         }
 
-        const totalEq1 = Object.values(eq1ByHour).reduce((a,b) => a+b, 0);
-        const totalEq2 = Object.values(eq2ByHour).reduce((a,b) => a+b, 0);
         const maxDataValue = Math.max(...avgPeopleArr, 1);
         const yMax = Math.max(Math.ceil(maxDataValue * 1.2), maxPeopleLimit);
 
@@ -1011,15 +1013,6 @@
 
         const ctx2 = document.getElementById('equipmentChart').getContext('2d');
         if (equipmentChart) equipmentChart.destroy();
-        
-        let eq1Bookings = 0, eq2Bookings = 0;
-        try {
-          const { data: eq1B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 1).eq('booking_date', today).in('status', ['confirmed', 'pending']);
-          eq1Bookings = eq1B ? eq1B.length : 0;
-          const { data: eq2B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 2).eq('booking_date', today).in('status', ['confirmed', 'pending']);
-          eq2Bookings = eq2B ? eq2B.length : 0;
-        } catch (e) { console.error('Get equipment bookings error:', e); }
-        
         equipmentChart = new Chart(ctx2, {
           type: 'bar',
           data: { 
@@ -1089,6 +1082,10 @@
           document.getElementById('a-peakHour').textContent = sorted[0].hour + ':00';
           document.getElementById('peakHoursInfo').innerHTML = sorted.slice(0, 3).map(h => '<p><span class="peak">' + h.hour + ':00</span> - 平均 ' + h.avg.toFixed(1) + ' 人</p>').join('');
           document.getElementById('quietHoursInfo').innerHTML = sorted.slice(-3).reverse().map(h => '<p><span class="quiet">' + h.hour + ':00</span> - 平均 ' + h.avg.toFixed(1) + ' 人</p>').join('');
+        } else {
+          document.getElementById('a-peakHour').textContent = '--';
+          document.getElementById('peakHoursInfo').innerHTML = '<p style="color:#999;">暂无数据</p>';
+          document.getElementById('quietHoursInfo').innerHTML = '<p style="color:#999;">暂无数据</p>';
         }
       } catch (e) { console.error('Load analytics error:', e); }
     }
