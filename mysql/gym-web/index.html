@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -82,13 +82,13 @@
     .equipment-name { font-size: 18px; font-weight: bold; color: #2c3e50; }
     .equipment-option.selected .equipment-name { color: white; }
 
-    .time-slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-top: 15px; }
-    .time-slot { padding: 16px; background: #f8f9fa; border: 3px solid #e1e8ed; border-radius: 12px; text-align: center; cursor: pointer; transition: all .3s; min-height: 70px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+    .time-slots { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 15px; }
+    .time-slot { padding: 10px 6px; background: #f8f9fa; border: 2px solid #e1e8ed; border-radius: 8px; text-align: center; cursor: pointer; transition: all .3s; min-height: 50px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
     .time-slot:hover { border-color: #3498db; background: #e8f4fd; transform: translateY(-2px); }
     .time-slot.selected { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-color: #5a67d8; color: white; }
     .time-slot.booked { background: #ecf0f1; border-color: #e74c3c; opacity: .6; cursor: not-allowed; }
-    .slot-time { font-size: 16px; font-weight: bold; margin-bottom: 6px; }
-    .slot-status { font-size: 12px; color: #7f8c8d; }
+    .slot-time { font-size: 12px; font-weight: bold; margin-bottom: 2px; }
+    .slot-status { font-size: 10px; color: #7f8c8d; }
     .time-slot.selected .slot-status { color: rgba(255,255,255,.9); }
     .time-slot.booked .slot-status { color: #e74c3c; }
 
@@ -112,7 +112,7 @@
 
     @media (max-width: 768px) {
       .sidebar { display: none; }
-      .time-slots { grid-template-columns: repeat(3, 1fr); }
+      .time-slots { grid-template-columns: repeat(4, 1fr); }
       .info-section { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -353,18 +353,30 @@
 
   <script>
     const FIXED_TIME_SLOTS = [
-      { id:1, time:'09:00-10:00', start:'09:00', end:'10:00' },
-      { id:2, time:'10:00-11:00', start:'10:00', end:'11:00' },
-      { id:3, time:'11:00-12:00', start:'11:00', end:'12:00' },
-      { id:4, time:'12:00-13:00', start:'12:00', end:'13:00' },
-      { id:5, time:'13:00-14:00', start:'13:00', end:'14:00' },
-      { id:6, time:'14:00-15:00', start:'14:00', end:'15:00' },
-      { id:7, time:'15:00-16:00', start:'15:00', end:'16:00' },
-      { id:8, time:'16:00-17:00', start:'16:00', end:'17:00' },
-      { id:9, time:'17:00-18:00', start:'17:00', end:'18:00' },
-      { id:10, time:'18:00-19:00', start:'18:00', end:'19:00' },
-      { id:11, time:'19:00-20:00', start:'19:00', end:'20:00' },
-      { id:12, time:'20:00-21:00', start:'20:00', end:'21:00' }
+      { id:1, time:'00:00-01:00', start:'00:00', end:'01:00' },
+      { id:2, time:'01:00-02:00', start:'01:00', end:'02:00' },
+      { id:3, time:'02:00-03:00', start:'02:00', end:'03:00' },
+      { id:4, time:'03:00-04:00', start:'03:00', end:'04:00' },
+      { id:5, time:'04:00-05:00', start:'04:00', end:'05:00' },
+      { id:6, time:'05:00-06:00', start:'05:00', end:'06:00' },
+      { id:7, time:'06:00-07:00', start:'06:00', end:'07:00' },
+      { id:8, time:'07:00-08:00', start:'07:00', end:'08:00' },
+      { id:9, time:'08:00-09:00', start:'08:00', end:'09:00' },
+      { id:10, time:'09:00-10:00', start:'09:00', end:'10:00' },
+      { id:11, time:'10:00-11:00', start:'10:00', end:'11:00' },
+      { id:12, time:'11:00-12:00', start:'11:00', end:'12:00' },
+      { id:13, time:'12:00-13:00', start:'12:00', end:'13:00' },
+      { id:14, time:'13:00-14:00', start:'13:00', end:'14:00' },
+      { id:15, time:'14:00-15:00', start:'14:00', end:'15:00' },
+      { id:16, time:'15:00-16:00', start:'15:00', end:'16:00' },
+      { id:17, time:'16:00-17:00', start:'16:00', end:'17:00' },
+      { id:18, time:'17:00-18:00', start:'17:00', end:'18:00' },
+      { id:19, time:'18:00-19:00', start:'18:00', end:'19:00' },
+      { id:20, time:'19:00-20:00', start:'19:00', end:'20:00' },
+      { id:21, time:'20:00-21:00', start:'20:00', end:'21:00' },
+      { id:22, time:'21:00-22:00', start:'21:00', end:'22:00' },
+      { id:23, time:'22:00-23:00', start:'22:00', end:'23:00' },
+      { id:24, time:'23:00-24:00', start:'23:00', end:'24:00' }
     ];
 
     let supabaseClient = null;
