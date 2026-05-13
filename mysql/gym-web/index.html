@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -856,20 +856,67 @@
 
         const ctx2 = document.getElementById('equipmentChart').getContext('2d');
         if (equipmentChart) equipmentChart.destroy();
+        
+        let eq1Bookings = 0, eq2Bookings = 0;
+        try {
+          const { data: eq1B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 1).eq('booking_date', today).in('status', ['confirmed', 'pending']);
+          eq1Bookings = eq1B ? eq1B.length : 0;
+          const { data: eq2B } = await supabaseClient.from('gym_bookings').select('id').eq('equipment_id', 2).eq('booking_date', today).in('status', ['confirmed', 'pending']);
+          eq2Bookings = eq2B ? eq2B.length : 0;
+        } catch (e) { console.error('Get equipment bookings error:', e); }
+        
         equipmentChart = new Chart(ctx2, {
           type: 'bar',
-          data: { labels: ['器械1', '器械2'], datasets: [{ label: '使用次数', data: [totalEq1, totalEq2], backgroundColor: ['#3498db', '#2ecc71'], borderRadius: 8 }] },
+          data: { 
+            labels: ['器械1', '器械2'], 
+            datasets: [
+              { 
+                label: '今日预约', 
+                data: [eq1Bookings, eq2Bookings], 
+                backgroundColor: 'rgba(231, 76, 60, 0.8)', 
+                borderRadius: 6,
+                barPercentage: 0.6,
+                categoryPercentage: 0.7
+              },
+              { 
+                label: '使用次数', 
+                data: [totalEq1, totalEq2], 
+                backgroundColor: 'rgba(46, 204, 113, 0.8)', 
+                borderRadius: 6,
+                barPercentage: 0.6,
+                categoryPercentage: 0.7
+              }
+            ] 
+          },
           options: { 
             responsive: true, 
             maintainAspectRatio: false, 
-            plugins: { legend: { display: false } }, 
+            plugins: { 
+              legend: { 
+                display: true,
+                position: 'top',
+                labels: { font: { size: 12 }, usePointStyle: true, pointStyle: 'rect' }
+              },
+              tooltip: {
+                backgroundColor: 'rgba(0,0,0,0.8)',
+                callbacks: {
+                  label: function(context) {
+                    return context.dataset.label + ': ' + context.parsed.y + '次';
+                  }
+                }
+              }
+            }, 
             scales: { 
               y: { 
                 beginAtZero: true,
-                ticks: { font: { size: 12 } },
-                grid: { color: 'rgba(0,0,0,0.1)' }
+                ticks: { 
+                  font: { size: 12 },
+                  stepSize: 1
+                },
+                grid: { color: 'rgba(0,0,0,0.1)' },
+                title: { display: true, text: '次数', font: { size: 12 } }
               },
-              x: { ticks: { font: { size: 12 } } }
+              x: { ticks: { font: { size: 12 } }, grid: { display: false } }
             }
           }
         });
