@@ -166,11 +166,18 @@ Page({
 
   async loadBookingsFromSupabase() {
     try {
-      const today = new Date().toISOString().split('T')[0]
+      const now = new Date()
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+      const nextWeekDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+      const nextWeek = `${nextWeekDate.getFullYear()}-${String(nextWeekDate.getMonth() + 1).padStart(2, '0')}-${String(nextWeekDate.getDate()).padStart(2, '0')}`
+      
+      console.log('[Supabase] Today (local):', today, 'NextWeek:', nextWeek)
       
       const result = await supabaseRequest('gym_bookings', 'GET', {
-        query: { booking_date: today, status: ['confirmed', 'pending'] },
-        select: 'equipment_id,start_time,end_time,username,status'
+        query: { status: ['confirmed', 'pending'] },
+        gte: { booking_date: today },
+        lte: { booking_date: nextWeek },
+        select: 'equipment_id,start_time,end_time,username,status,booking_date'
       })
 
       if (result.success && result.data) {
@@ -182,7 +189,8 @@ Page({
             startTime: b.start_time ? b.start_time.substring(0, 5) : '--',
             endTime: b.end_time ? b.end_time.substring(0, 5) : '--',
             username: b.username,
-            status: b.status || 'confirmed'
+            status: b.status || 'confirmed',
+            date: b.booking_date || today
           }
           
           if (b.equipment_id === 1 || b.equipment_id === '1') {

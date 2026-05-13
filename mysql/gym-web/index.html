@@ -780,7 +780,8 @@
     async function loadAnalytics() {
       if (!supabaseClient) return;
       try {
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00').order('create_time', { ascending: true });
         
         let todayBookingCount = 0;
@@ -1059,7 +1060,8 @@
     async function loadAdminAnalytics() {
       if (!supabaseClient) return;
       try {
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
         const { data } = await supabaseClient.from('gym_history').select('*').gte('create_time', today + 'T00:00:00');
         const el = document.getElementById('admin-analytics');
         if (!data || data.length === 0) { el.innerHTML = '<div class="no-data">今日暂无数据</div>'; return; }
