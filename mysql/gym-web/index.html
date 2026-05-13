@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -321,17 +321,14 @@
           <div class="card-title">Supabase 连接配置</div>
           <div class="config-section">
             <label>Supabase URL</label>
-            <input type="text" id="cfg-supabase-url" placeholder="https://xxxxx.supabase.co">
-            <div class="hint">在 Supabase 项目 Settings > API 中找到</div>
+            <input type="text" value="https://aikgfrjvockpqhswingw.supabase.co" readonly style="background:#f5f5f5;">
           </div>
           <div class="config-section">
             <label>Supabase Anon Key</label>
-            <input type="text" id="cfg-supabase-key" placeholder="eyJhbGciOiJI...">
-            <div class="hint">在 Supabase 项目 Settings > API 中找到 anon public key</div>
+            <input type="text" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." readonly style="background:#f5f5f5;">
+            <div class="hint">配置已由管理员预设，无需修改</div>
           </div>
-          <button class="btn btn-green" onclick="saveConfig()" style="margin-top:12px;">💾 保存配置</button>
-          <button class="btn btn-blue" onclick="testConnection()" style="margin-top:12px;">🔗 测试连接</button>
-          <div id="configMessage" style="margin-top:12px;"></div>
+          <div style="margin-top:12px;color:#27ae60;">✅ 数据库已连接</div>
         </div>
         <div class="card">
           <div class="card-title">系统信息</div>
@@ -380,6 +377,9 @@
       { id:24, time:'23:00-24:00', start:'23:00', end:'24:00' }
     ];
 
+    const SUPABASE_URL = 'https://aikgfrjvockpqhswingw.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFpa2dmcmp2b2NrcHFoc3dpbmd3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgwNjc4MzYsImV4cCI6MjA5MzY0MzgzNn0.lkoksXlLvwpjmpEZo4UFSy3_IAucU-b9Oky-I-yEmaU';
+
     let supabaseClient = null;
     let currentUser = null;
     let selectedEquipment = null;
@@ -396,49 +396,12 @@
     }
 
     function initSupabase() {
-      const url = localStorage.getItem('supabase_url');
-      const key = localStorage.getItem('supabase_key');
-      if (url && key) {
-        try {
-          supabaseClient = window.supabase.createClient(url, key);
-          return true;
-        } catch (e) {
-          console.error('Supabase init error:', e);
-          return false;
-        }
-      }
-      return false;
-    }
-
-    function loadConfig() {
-      document.getElementById('cfg-supabase-url').value = localStorage.getItem('supabase_url') || '';
-      document.getElementById('cfg-supabase-key').value = localStorage.getItem('supabase_key') || '';
-    }
-
-    function saveConfig() {
-      const url = document.getElementById('cfg-supabase-url').value.trim();
-      const key = document.getElementById('cfg-supabase-key').value.trim();
-      if (!url || !key) {
-        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">请填写完整的 URL 和 Key</span>';
-        return;
-      }
-      localStorage.setItem('supabase_url', url);
-      localStorage.setItem('supabase_key', key);
-      initSupabase();
-      document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">✅ 配置已保存</span>';
-    }
-
-    async function testConnection() {
-      if (!initSupabase()) {
-        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">❌ 请先填写并保存配置</span>';
-        return;
-      }
       try {
-        const { data, error } = await supabaseClient.from('gym_status').select('*').limit(1);
-        if (error) throw error;
-        document.getElementById('configMessage').innerHTML = '<span style="color:#27ae60;">✅ 连接成功！数据库可访问</span>';
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
       } catch (e) {
-        document.getElementById('configMessage').innerHTML = '<span style="color:#e74c3c;">❌ 连接失败: ' + e.message + '</span>';
+        console.error('Supabase init error:', e);
+        return false;
       }
     }
 
@@ -1239,12 +1202,7 @@
     }
 
     window.addEventListener('load', () => {
-      const hasConfig = initSupabase();
-      if (!hasConfig) {
-        currentUser = { id: 0, username: '__setup__', role: 'admin' };
-        showApp();
-        navigate('settings');
-      }
+      initSupabase();
     });
   </script>
 </body>
