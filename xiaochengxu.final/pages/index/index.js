@@ -164,6 +164,23 @@ Page({
     }
   },
 
+  isBookingExpired(booking) {
+    const now = new Date()
+    const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+    const currentHour = now.getHours()
+    
+    if (booking.booking_date < today) {
+      return true
+    }
+    if (booking.booking_date === today) {
+      const startHour = parseInt(booking.start_time ? booking.start_time.split(':')[0] : 0)
+      if (startHour <= currentHour) {
+        return true
+      }
+    }
+    return false
+  },
+
   async loadBookingsFromSupabase() {
     try {
       const now = new Date()
@@ -185,6 +202,11 @@ Page({
         const equipment2Bookings = []
 
         result.data.forEach(b => {
+          if (this.isBookingExpired(b)) {
+            console.log('[Supabase] Skipping expired booking:', b.booking_date, b.start_time)
+            return
+          }
+          
           const bookingInfo = {
             startTime: b.start_time ? b.start_time.substring(0, 5) : '--',
             endTime: b.end_time ? b.end_time.substring(0, 5) : '--',

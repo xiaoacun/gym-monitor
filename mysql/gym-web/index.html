@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -583,8 +583,50 @@
       }, 5000);
     }
 
+    function isBookingExpired(booking) {
+      const now = new Date();
+      const today = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+      const currentHour = now.getHours();
+      
+      if (booking.booking_date < today) {
+        return true;
+      }
+      if (booking.booking_date === today) {
+        const startHour = parseInt(booking.start_time ? booking.start_time.split(':')[0] : 0);
+        if (startHour <= currentHour) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    async function autoCancelExpiredBookings() {
+      if (!supabaseClient) return;
+      try {
+        const { data: bookings } = await supabaseClient.from('gym_bookings').select('*').in('status', ['confirmed', 'pending']);
+        if (!bookings || bookings.length === 0) return;
+        
+        const expiredIds = [];
+        bookings.forEach(b => {
+          if (isBookingExpired(b)) {
+            expiredIds.push(b.id);
+          }
+        });
+        
+        if (expiredIds.length > 0) {
+          console.log('Auto cancelling expired bookings:', expiredIds);
+          for (const id of expiredIds) {
+            await supabaseClient.from('gym_bookings').update({ status: 'expired' }).eq('id', id);
+          }
+        }
+      } catch (e) { console.error('Auto cancel expired bookings error:', e); }
+    }
+
     async function loadDashboard() {
       if (!supabaseClient) return;
+      
+      await autoCancelExpiredBookings();
+      
       try {
         const { data, error } = await supabaseClient.from('gym_status').select('*').order('update_time', { ascending: false }).limit(1).single();
         if (error && error.code !== 'PGRST116') throw error;
