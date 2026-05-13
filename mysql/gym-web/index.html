@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -622,14 +622,14 @@
 
     async function cancelBooking(bookingId) {
       if (!bookingId) {
-        alert('❌ 预约ID无效');
+        showNotification('❌ 预约ID无效', 'error');
         return;
       }
       const confirmed = confirm('⚠️ 确定要取消这个预约吗？\n\n此操作不可撤销！');
       if (!confirmed) return;
       
       if (!supabaseClient) {
-        alert('❌ 数据库未连接，请刷新页面重试');
+        showNotification('❌ 数据库未连接，请刷新页面重试', 'error');
         return;
       }
       
@@ -637,21 +637,36 @@
         const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', bookingId);
         if (result.error) {
           console.error('Cancel booking error:', result.error);
-          alert('❌ 取消失败: ' + (result.error.message || '未知错误'));
+          showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
           return;
         }
-        alert('✅ 预约已取消');
-        setTimeout(() => {
-          try {
-            loadDashboard();
-          } catch (e) {
-            console.error('Reload dashboard error:', e);
-          }
-        }, 100);
+        showNotification('✅ 预约已取消', 'success');
+        loadDashboard();
       } catch (e) {
         console.error('Cancel booking exception:', e);
-        alert('❌ 取消失败: ' + (e.message || '网络错误'));
+        showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
       }
+    }
+
+    function showNotification(message, type) {
+      const existing = document.querySelector('.notification-toast');
+      if (existing) existing.remove();
+      
+      const toast = document.createElement('div');
+      toast.className = 'notification-toast ' + (type || 'info');
+      toast.textContent = message;
+      toast.style.cssText = 'position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:8px;font-size:14px;z-index:10000;animation:fadeIn 0.3s ease;box-shadow:0 4px 12px rgba(0,0,0,0.15);';
+      if (type === 'success') toast.style.background = '#27ae60';
+      else if (type === 'error') toast.style.background = '#e74c3c';
+      else toast.style.background = '#3498db';
+      toast.style.color = 'white';
+      
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
     }
 
     function initBookingPage() {
@@ -1010,21 +1025,21 @@
       if (!confirmed) return;
       
       if (!supabaseClient) {
-        alert('❌ 数据库未连接');
+        showNotification('❌ 数据库未连接', 'error');
         return;
       }
       
       try {
         const result = await supabaseClient.from('gym_bookings').update({ status: 'cancelled' }).eq('id', id);
         if (result.error) {
-          alert('❌ 取消失败: ' + (result.error.message || '未知错误'));
+          showNotification('❌ 取消失败: ' + (result.error.message || '未知错误'), 'error');
           return;
         }
-        alert('✅ 已取消');
-        setTimeout(() => loadAdminBookings(), 100);
+        showNotification('✅ 已取消', 'success');
+        loadAdminBookings();
       } catch (e) {
         console.error('Admin cancel error:', e);
-        alert('❌ 取消失败: ' + (e.message || '网络错误'));
+        showNotification('❌ 取消失败: ' + (e.message || '网络错误'), 'error');
       }
     }
 
