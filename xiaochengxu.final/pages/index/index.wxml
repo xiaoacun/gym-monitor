@@ -55,11 +55,8 @@
         </view>
       </view>
       <view class="equipment-right">
-        <view class="equipment-status {{equipment1 ? 'occupied' : 'free'}}">
-          {{equipment1 ? '使用中' : '空闲'}}
-        </view>
-        <view class="equipment-booking-status {{equipment1Booked ? 'booked' : 'available'}}">
-          {{equipment1Booked ? '已预约' : '可预约'}}
+        <view class="equipment-status {{equipment1 || equipment1Booked ? 'occupied' : 'free'}}">
+          {{equipment1 || equipment1Booked ? '占用' : '空闲'}}
         </view>
         <view class="equipment-count">总计 {{equipment1Count}} 次</view>
       </view>
@@ -76,11 +73,8 @@
         </view>
       </view>
       <view class="equipment-right">
-        <view class="equipment-status {{equipment2 ? 'occupied' : 'free'}}">
-          {{equipment2 ? '使用中' : '空闲'}}
-        </view>
-        <view class="equipment-booking-status {{equipment2Booked ? 'booked' : 'available'}}">
-          {{equipment2Booked ? '已预约' : '可预约'}}
+        <view class="equipment-status {{equipment2 || equipment2Booked ? 'occupied' : 'free'}}">
+          {{equipment2 || equipment2Booked ? '占用' : '空闲'}}
         </view>
         <view class="equipment-count">总计 {{equipment2Count}} 次</view>
       </view>
