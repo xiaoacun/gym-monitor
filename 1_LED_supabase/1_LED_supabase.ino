@@ -137,6 +137,17 @@ void setup() {
   lastExitState = digitalRead(IR_EXIT);
 
   connectWiFi();
+  
+  configTime(8 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  Serial.println("Waiting for NTP time sync...");
+  time_t now = time(nullptr);
+  while (now < 8 * 3600 * 2) {
+    delay(500);
+    Serial.print(".");
+    now = time(nullptr);
+  }
+  Serial.println("\nNTP time synced!");
+  
   client.setServer(mqttServer, mqttPort);
 
   Serial.println("System Ready!");
@@ -360,7 +371,11 @@ void updateSupabaseStatus() {
   http.addHeader("Content-Type", "application/json");
   http.addHeader("Prefer", "return=minimal");
 
-  StaticJsonDocument<384> obj;
+  time_t now = time(nullptr);
+  char timeStr[32];
+  strftime(timeStr, sizeof(timeStr), "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
+
+  StaticJsonDocument<512> obj;
   obj["current_people"] = currentPeople;
   obj["total_entered"] = totalEntered;
   obj["max_people"] = MAX_PEOPLE;
@@ -370,8 +385,9 @@ void updateSupabaseStatus() {
   obj["equipment2"] = equipment2Occupied ? 1 : 0;
   obj["equipment1_count"] = equipment1UsageCount;
   obj["equipment2_count"] = equipment2UsageCount;
+  obj["update_time"] = timeStr;
 
-  char payload[384];
+  char payload[512];
   serializeJson(obj, payload);
 
   int httpCode = http.PATCH(payload);
