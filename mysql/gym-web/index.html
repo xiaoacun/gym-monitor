@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -1053,9 +1053,20 @@
 
         let totalPeople = 0;
         if (data && data.length > 0) {
+          let lastResetIndex = 0;
+          for (let i = 1; i < data.length; i++) {
+            const prevTotal = data[i - 1].total_entered || 0;
+            const currTotal = data[i].total_entered || 0;
+            if (currTotal < prevTotal) {
+              lastResetIndex = i;
+            }
+          }
           const lastRecord = data[data.length - 1];
-          const firstRecord = data[0];
-          totalPeople = (lastRecord.total_entered || 0) - (firstRecord.total_entered || 0);
+          const resetRecord = data[lastResetIndex];
+          totalPeople = (lastRecord.total_entered || 0) - (resetRecord.total_entered || 0);
+          if (lastResetIndex > 0) {
+            console.log('[Analytics] ESP32 reset detected at index', lastResetIndex, ', totalPeople:', totalPeople);
+          }
         }
         
         const maxPeopleByHour = {};
